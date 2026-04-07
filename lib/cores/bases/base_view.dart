@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
+import 'package:klinikku/cores/widgets/loading_indicator.dart';
 import 'base_notifier.dart';
 
 class BaseView<T extends BaseNotifier> extends ConsumerWidget {
-  final AutoDisposeChangeNotifierProvider<T> provider;
+  final ChangeNotifierProvider<T> provider;
   final Widget Function(BuildContext, T) builder;
   final Widget Function(BuildContext, T)? overlayBuilder;
   final PreferredSizeWidget Function(T)? appBar;

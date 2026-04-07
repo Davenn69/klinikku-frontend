@@ -9,7 +9,7 @@ abstract class BaseNotifier extends ChangeNotifier {
   bool _isInitializeDone = false;
   bool _showOverlay = false;
 
-  final Ref<Object?> ref;
+  final Ref ref;
 
   BaseNotifier(this.ref) {
     _init();
