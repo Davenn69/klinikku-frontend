@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:klinikku/cores/constants/custom_theme.dart';
 import 'package:klinikku/cores/router/router.dart';
 import 'package:oktoast/oktoast.dart';
 
@@ -49,6 +50,7 @@ class _KlinikkuState extends State<Klinikku> {
       child: OKToast(
         child: MaterialApp.router(
           routerConfig: router,
+          theme: CustomTheme.lightTheme.themeData,
           title: 'Klinikku',
           builder:
               (_, child) => MediaQuery(
