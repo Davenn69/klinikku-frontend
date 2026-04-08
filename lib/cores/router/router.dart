@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:klinikku/cores/router/route_constant.dart';
 import 'package:klinikku/features/auth/views/login_view.dart';
+import 'package:klinikku/features/booking/views/select_appointment_view.dart';
 import 'package:klinikku/features/dashboard/views/dashboard_view.dart';
 import 'package:klinikku/features/splash/views/splash_view.dart';
 
@@ -29,6 +30,11 @@ setUpRoute({required String initialRoute}) {
         path: RouterRoutes.dashboard.path,
         name: RouterRoutes.dashboard.name,
         builder: (context, state) => DashboardView(),
+      ),
+      GoRoute(
+        path: RouterRoutes.selectAppointment.path,
+        name: RouterRoutes.selectAppointment.name,
+        builder: (context, state) => SelectAppointmentView(),
       ),
     ],
   );
