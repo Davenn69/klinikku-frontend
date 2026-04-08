@@ -15,6 +15,10 @@ class RouterRoutes {
     path: '/selectAppointment',
     name: 'selectAppointment',
   );
+  static const bookingConfirmation = RouterRoute(
+    path: '/bookingConfirmation',
+    name: 'bookingConfirmation',
+  );
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
