@@ -14,10 +14,10 @@ convertToFlavorEnum(String value) {
 }
 
 class FlavorValues {
-  final String apiUrl;
+  final String baseUrl;
   final bool showBanner;
 
-  FlavorValues({required this.apiUrl, this.showBanner = false});
+  FlavorValues({required this.baseUrl, this.showBanner = false});
 
   String token = 'ab';
 }
