@@ -48,7 +48,9 @@ class DashboardVM extends BaseNotifier with ToastMixin {
         icon: Icons.assignment_rounded,
         iconBackgroundColor: Color(0xFFF8ECD8),
         iconColor: Color(0xFFE0A548),
-        onTap: () {},
+        onTap: () {
+          goToBookingList();
+        },
       ),
       DashboardQuickAction(
         title: 'Dokter Tersedia',
@@ -84,6 +86,10 @@ class DashboardVM extends BaseNotifier with ToastMixin {
 
   void goToSelectAppointment() {
     ctx.pushNamed(RouterRoutes.selectAppointment.name);
+  }
+
+  void goToBookingList() {
+    ctx.pushNamed(RouterRoutes.bookingList.name);
   }
 
   void onQuickActionTap(DashboardQuickAction action) {

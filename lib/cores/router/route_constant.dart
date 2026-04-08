@@ -15,6 +15,10 @@ class RouterRoutes {
     path: '/selectAppointment',
     name: 'selectAppointment',
   );
+  static const bookingList = RouterRoute(
+    path: '/bookingList',
+    name: 'bookingList',
+  );
   static const bookingConfirmation = RouterRoute(
     path: '/bookingConfirmation',
     name: 'bookingConfirmation',
