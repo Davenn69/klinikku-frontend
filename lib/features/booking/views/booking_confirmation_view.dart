@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:klinikku/cores/bases/base_view.dart';
 import 'package:klinikku/cores/constants/colors.dart';
 import 'package:klinikku/cores/constants/text_theme.dart';
+import 'package:klinikku/cores/router/route_constant.dart';
 import 'package:klinikku/cores/widgets/custom_button.dart';
 import 'package:klinikku/cores/widgets/custom_text_field.dart';
 import 'package:klinikku/features/booking/models/booking_confirmation_model.dart';
@@ -66,14 +68,21 @@ class BookingConfirmationView extends StatelessWidget {
                           size: 20.sp,
                           color: AppColors.white,
                         ),
-                        onPressed: vm.confirmBooking,
+                        onPressed:
+                            () => vm.confirmBooking(
+                              data.doctor.id,
+                              data.region.id,
+                              data.appointment.id,
+                            ),
                         height: 54.h,
                       ),
                       Gap(14.h),
                       Button(
                         text: 'Batalkan',
                         isSecondary: true,
-                        onPressed: () => Navigator.of(context).maybePop(),
+                        onPressed: () {
+                          ctx.pop();
+                        },
                         height: 54.h,
                         textStyle: textTheme.button.copyWith(
                           color: AppColors.primary,
