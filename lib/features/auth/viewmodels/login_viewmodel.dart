@@ -47,8 +47,13 @@ class LoginVM extends BaseFormNotifier<LoginFormModel>
     if (!validate()) return;
     isLoading = true;
     var response = await _service.login(form.email.text, form.password.text);
+    isLoading = false;
     if (response is DioException) {
-      showErrorToast('$response');
+      String errorMsg =
+          response.response == null
+              ? "Internal server error."
+              : response.response!.data['error']['message'];
+      showErrorToast(errorMsg);
       return;
     }
 
