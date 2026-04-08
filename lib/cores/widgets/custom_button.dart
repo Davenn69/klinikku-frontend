@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:klinikku/cores/constants/button_theme/primary_button_theme.dart';
 import 'package:klinikku/cores/constants/button_theme/secondary_button_theme.dart';
+import 'package:klinikku/cores/constants/colors.dart';
 
 class Button extends StatefulWidget {
   final String text;
@@ -51,6 +52,14 @@ class _ButtonState extends State<Button> {
             ? secondaryButtonTheme.style!
             : primaryButtonTheme.style!;
     TextStyle textStyle = style.textStyle!.resolve({})!;
+    final bool isDisabled = widget.onPressed == null;
+    final TextStyle resolvedTextStyle =
+        widget.textStyle ??
+        (isDisabled
+            ? textStyle.copyWith(
+              color: AppColors.gray1.withValues(alpha: 0.45),
+            )
+            : textStyle);
     return SizedBox(
       width: widget.width,
       height: widget.height ?? 48.h,
@@ -87,7 +96,7 @@ class _ButtonState extends State<Button> {
               padding: EdgeInsets.symmetric(vertical: 4.h),
               child: Text(
                 widget.text,
-                style: widget.textStyle ?? textStyle,
+                style: resolvedTextStyle,
                 textAlign: TextAlign.center,
               ),
             ),
