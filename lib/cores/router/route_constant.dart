@@ -9,6 +9,7 @@ class RouterRoute {
 
 class RouterRoutes {
   static const splash = RouterRoute(path: '/', name: 'splash');
+  static const login = RouterRoute(path: '/login', name: 'login');
   static const dashboard = RouterRoute(path: '/dashboard', name: 'dashboard');
 }
 
