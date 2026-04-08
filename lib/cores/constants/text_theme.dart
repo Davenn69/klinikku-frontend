@@ -75,6 +75,13 @@ class _TextTheme {
     height: 1.5,
   );
 
+  final caption2 = TextStyle(
+    fontSize: 13.sp,
+    fontWeight: FontWeight.w300,
+    color: AppColors.gray3,
+    height: 1.5,
+  );
+
   final button = TextStyle(
     fontSize: 15.sp,
     fontWeight: FontWeight.w600,
