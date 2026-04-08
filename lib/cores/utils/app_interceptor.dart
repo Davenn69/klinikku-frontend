@@ -19,5 +19,7 @@ class AppInterceptor extends Interceptor {
       print('error status code ${err.response?.statusCode}');
       print('==== ERROR INTERCEPTOR END ====');
     }
+
+    handler.next(err);
   }
 }
