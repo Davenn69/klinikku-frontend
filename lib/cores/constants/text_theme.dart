@@ -77,8 +77,8 @@ class _TextTheme {
 
   final button = TextStyle(
     fontSize: 15.sp,
-    fontWeight: FontWeight.w500,
-    color: AppColors.black,
+    fontWeight: FontWeight.w600,
+    color: AppColors.white,
   );
 
   final buttonText = TextStyle(fontSize: 15.sp, color: AppColors.white);
