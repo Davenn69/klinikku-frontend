@@ -142,10 +142,7 @@ class DashboardView extends StatelessWidget {
     ),
     itemBuilder: (context, index) {
       final action = vm.quickActions[index];
-      return QuickActionCard(
-        action: action,
-        onTap: () => vm.onQuickActionTap(action),
-      );
+      return QuickActionCard(action: action, onTap: () => action.onTap());
     },
   );
 
