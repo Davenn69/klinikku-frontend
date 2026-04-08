@@ -19,7 +19,7 @@ class BaseService with ToastMixin {
     String? tempToken,
   }) async {
     final Response<dynamic> response = await _dio.get(
-      '${FlavorConfig.instance?.values.apiUrl}$url',
+      '${FlavorConfig.instance?.values.baseUrl}$url',
       queryParameters: params,
       options: Options(
         headers: {
@@ -43,7 +43,7 @@ class BaseService with ToastMixin {
     String? tempToken,
   }) async {
     final Response<dynamic> response = await _dio.post(
-      '${FlavorConfig.instance?.values.apiUrl}$url',
+      '${FlavorConfig.instance?.values.baseUrl}$url',
       options: Options(
         headers: {
           'Authorization':
@@ -65,7 +65,7 @@ class BaseService with ToastMixin {
     Map<String, dynamic>? data,
   }) async {
     final Response<dynamic> response = await _dio.put(
-      '${FlavorConfig.instance?.values.apiUrl}$url',
+      '${FlavorConfig.instance?.values.baseUrl}$url',
       options: Options(
         headers: {
           'Authorization': 'Bearer ${FlavorConfig.instance?.values.token}',
@@ -85,7 +85,7 @@ class BaseService with ToastMixin {
     Map<String, dynamic>? data,
   }) async {
     final Response<dynamic> response = await _dio.delete(
-      '${FlavorConfig.instance?.values.apiUrl}$url',
+      '${FlavorConfig.instance?.values.baseUrl}$url',
       options: Options(
         headers: {
           'Authorization': 'Bearer ${FlavorConfig.instance?.values.token}',
