@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:klinikku/cores/bases/base_form_notifier.dart';
 import 'package:klinikku/cores/mixins/toast_mixin.dart';
 import 'package:klinikku/cores/models/selection_input_model.dart';
+import 'package:klinikku/cores/router/route_constant.dart';
 import 'package:klinikku/features/booking/models/appointment_day_item.dart';
 import 'package:klinikku/features/booking/models/appointment_slot_item.dart';
 import 'package:klinikku/features/booking/models/doctor_model.dart';
@@ -98,7 +100,20 @@ class SelectAppointmentVM extends BaseFormNotifier<SelectAppointmentFormModel>
     notifyListeners();
   }
 
-  void onSlotTap(AppointmentSlotItem slot) {}
+  void onSlotTap(AppointmentSlotItem slot) {
+    if (form.doctor.selectedValue == null ||
+        form.region.selectedValue == null) {
+      return;
+    }
+    ctx.pushNamed(
+      RouterRoutes.bookingConfirmation.name,
+      extra: {
+        'doctor': form.doctor.selectedValue,
+        'region': form.region.selectedValue,
+        'appointment': slot,
+      },
+    );
+  }
 
   getRegions() async {
     final response = await _service.getRegions();
