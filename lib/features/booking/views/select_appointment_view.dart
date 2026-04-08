@@ -5,6 +5,8 @@ import 'package:klinikku/cores/bases/base_view.dart';
 import 'package:klinikku/cores/constants/colors.dart';
 import 'package:klinikku/cores/constants/text_theme.dart';
 import 'package:klinikku/cores/widgets/custom_dropdown.dart';
+import 'package:klinikku/features/booking/models/doctor_model.dart';
+import 'package:klinikku/features/booking/models/region_model.dart';
 import 'package:klinikku/features/booking/viewmodels/select_appointment_viewmodel.dart';
 import 'package:klinikku/features/booking/widgets/day_tile.dart';
 import 'package:klinikku/features/booking/widgets/slot_card.dart';
@@ -31,22 +33,22 @@ class SelectAppointmentView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomDropdownButton<String>(
+                CustomDropdownButton<RegionModel>(
                   options: vm.regions,
                   hint: 'Pilih region',
                   label: 'REGION',
                   inputModel: vm.form.region,
-                  getLabel: (value) => value ?? '',
-                  onValueChanged: vm.onRegionChanged,
+                  getLabel: (value) => value?.name ?? '',
+                  onValueChanged: (data) => vm.onRegionChanged(data.id),
                 ),
                 Gap(16.h),
-                CustomDropdownButton<String>(
+                CustomDropdownButton<DoctorModel>(
                   options: vm.doctors,
                   hint: 'Pilih dokter',
                   label: 'DOKTER',
                   inputModel: vm.form.doctor,
-                  getLabel: (value) => value ?? '',
-                  onValueChanged: vm.onDoctorChanged,
+                  getLabel: (value) => value?.name ?? '',
+                  onValueChanged: (data) => vm.onDoctorChanged(data),
                 ),
                 Gap(16.h),
                 Text(
@@ -77,22 +79,31 @@ class SelectAppointmentView extends StatelessWidget {
                   'Menampilkan 4 slot untuk ${vm.selectedDateText}',
                   style: textTheme.body6.copyWith(color: AppColors.gray1),
                 ),
-                Gap(16.h),
-                Column(
-                  children:
-                      vm.slots.map((slot) {
-                        return Padding(
-                          padding: EdgeInsets.only(bottom: 12.h),
-                          child: SlotCard(
-                            slot: slot,
-                            onTap:
-                                slot.isAvailable
-                                    ? () => vm.onSlotTap(slot)
-                                    : null,
-                          ),
-                        );
-                      }).toList(),
-                ),
+                if (vm.slots.isNotEmpty) ...[
+                  Gap(16.h),
+                  Column(
+                    children:
+                        vm.slots.map((slot) {
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: 12.h),
+                            child: SlotCard(
+                              slot: slot,
+                              doctorSpecialization:
+                                  vm
+                                      .form
+                                      .doctor
+                                      .selectedValue
+                                      ?.specialization ??
+                                  '',
+                              onTap:
+                                  slot.isAvailable
+                                      ? () => vm.onSlotTap(slot)
+                                      : null,
+                            ),
+                          );
+                        }).toList(),
+                  ),
+                ],
               ],
             ),
           ),

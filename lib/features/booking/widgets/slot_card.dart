@@ -8,9 +8,15 @@ import 'package:klinikku/features/booking/models/appointment_slot_item.dart';
 
 class SlotCard extends StatelessWidget {
   final AppointmentSlotItem slot;
+  final String doctorSpecialization;
   final VoidCallback? onTap;
 
-  const SlotCard({super.key, required this.slot, required this.onTap});
+  const SlotCard({
+    super.key,
+    required this.slot,
+    required this.onTap,
+    required this.doctorSpecialization,
+  });
 
   @override
   Widget build(BuildContext context) => Container(
@@ -34,7 +40,7 @@ class SlotCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                slot.timeRange,
+                slot.timeRangeText,
                 style: textTheme.body2.copyWith(
                   color: slot.isAvailable ? AppColors.black : AppColors.gray1,
                   fontWeight: FontWeight.w700,
@@ -42,7 +48,7 @@ class SlotCard extends StatelessWidget {
               ),
               Gap(2.h),
               Text(
-                slot.detail,
+                '${slot.durationText} - $doctorSpecialization',
                 style: textTheme.body6.copyWith(color: AppColors.gray1),
               ),
             ],
