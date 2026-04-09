@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:klinikku/cores/bases/base_view.dart';
 import 'package:klinikku/cores/constants/colors.dart';
 import 'package:klinikku/cores/constants/text_theme.dart';
+import 'package:klinikku/cores/router/route_constant.dart';
+import 'package:klinikku/cores/widgets/tap_detector.dart';
 import 'package:klinikku/features/booking/models/booking_model.dart';
 import 'package:klinikku/features/booking/viewmodels/booking_list_viewmodel.dart';
 
@@ -172,102 +175,107 @@ class _BookingCard extends StatelessWidget {
   const _BookingCard({required this.item});
 
   @override
-  Widget build(BuildContext context) => Container(
-    width: double.infinity,
-    padding: EdgeInsets.all(18.w),
-    decoration: BoxDecoration(
-      color: AppColors.white,
-      borderRadius: BorderRadius.circular(24.r),
-      boxShadow: [
-        BoxShadow(
-          color: AppColors.black.withValues(alpha: 0.05),
-          blurRadius: 20,
-          offset: const Offset(0, 8),
-        ),
-      ],
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.bookingCode,
-                    style: textTheme.body6.copyWith(
-                      color: AppColors.gray1,
-                      letterSpacing: 0.6,
-                      fontWeight: FontWeight.w700,
+  Widget build(BuildContext context) => TapDetector(
+    onTap: () {
+      ctx.pushNamed(RouterRoutes.bookingDetail.name, extra: {'id': item.id});
+    },
+    child: Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(18.w),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(24.r),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withValues(alpha: 0.05),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.bookingCode,
+                      style: textTheme.body6.copyWith(
+                        color: AppColors.gray1,
+                        letterSpacing: 0.6,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
-                  ),
-                  Gap(4.h),
-                  Text(
-                    item.doctor.name,
-                    style: textTheme.body2.copyWith(
-                      fontWeight: FontWeight.w800,
-                      height: 1.2,
+                    Gap(4.h),
+                    Text(
+                      item.doctor.name,
+                      style: textTheme.body2.copyWith(
+                        fontWeight: FontWeight.w800,
+                        height: 1.2,
+                      ),
                     ),
-                  ),
-                  Gap(2.h),
-                  Text(
-                    '${item.doctor.specialization} · ${item.region.name}',
-                    style: textTheme.body6.copyWith(color: AppColors.gray1),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 8.h),
-              decoration: BoxDecoration(
-                color: item.statusBackgroundColor,
-                borderRadius: BorderRadius.circular(999.r),
-              ),
-              child: Text(
-                item.statusLabel,
-                style: textTheme.caption1.copyWith(
-                  color: item.statusTextColor,
-                  fontWeight: FontWeight.w800,
+                    Gap(2.h),
+                    Text(
+                      '${item.doctor.specialization} · ${item.region.name}',
+                      style: textTheme.body6.copyWith(color: AppColors.gray1),
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
-        ),
-        Gap(14.h),
-        Divider(height: 1, thickness: 1, color: AppColors.gray2),
-        Gap(12.h),
-        Row(
-          children: [
-            Text('📅', style: TextStyle(fontSize: 18.sp)),
-            Gap(8.w),
-            Expanded(
-              child: Text(
-                item.appointmentSlot.timeRangeText,
-                style: textTheme.body6.copyWith(
-                  color: AppColors.gray1,
-                  fontWeight: FontWeight.w500,
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 8.h),
+                decoration: BoxDecoration(
+                  color: item.statusBackgroundColor,
+                  borderRadius: BorderRadius.circular(999.r),
+                ),
+                child: Text(
+                  item.statusLabel,
+                  style: textTheme.caption1.copyWith(
+                    color: item.statusTextColor,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
-            ),
-            Container(
-              width: 48.w,
-              height: 48.w,
-              decoration: BoxDecoration(
-                color: const Color(0xFFEAF5F4),
-                shape: BoxShape.circle,
+            ],
+          ),
+          Gap(14.h),
+          Divider(height: 1, thickness: 1, color: AppColors.gray2),
+          Gap(12.h),
+          Row(
+            children: [
+              Text('📅', style: TextStyle(fontSize: 18.sp)),
+              Gap(8.w),
+              Expanded(
+                child: Text(
+                  item.appointmentSlot.timeRangeText,
+                  style: textTheme.body6.copyWith(
+                    color: AppColors.gray1,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
-              child: Icon(
-                Icons.chevron_right_rounded,
-                color: AppColors.primary,
-                size: 28.sp,
+              Container(
+                width: 48.w,
+                height: 48.w,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEAF5F4),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.chevron_right_rounded,
+                  color: AppColors.primary,
+                  size: 28.sp,
+                ),
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     ),
   );
 }
