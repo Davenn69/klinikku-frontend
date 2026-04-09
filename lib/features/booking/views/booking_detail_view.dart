@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:klinikku/cores/bases/base_view.dart';
 import 'package:klinikku/cores/constants/colors.dart';
 import 'package:klinikku/cores/constants/text_theme.dart';
+import 'package:klinikku/cores/widgets/custom_button.dart';
 import 'package:klinikku/features/booking/viewmodels/booking_detail_viewmodel.dart';
 
 class BookingDetailView extends StatelessWidget {
@@ -100,6 +101,12 @@ class BookingDetailView extends StatelessWidget {
                       height: 1.55,
                     ),
                   ),
+                ),
+                Gap(16.h),
+                Button(
+                  isCancel: true,
+                  text: 'Cancel this appointment',
+                  onPressed: () => vm.deleteBooking(),
                 ),
               ],
             ),

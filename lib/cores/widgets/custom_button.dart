@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:klinikku/cores/constants/button_theme/cancel_button_theme.dart';
 import 'package:klinikku/cores/constants/button_theme/primary_button_theme.dart';
 import 'package:klinikku/cores/constants/button_theme/secondary_button_theme.dart';
 import 'package:klinikku/cores/constants/colors.dart';
@@ -13,6 +14,7 @@ class Button extends StatefulWidget {
   final double? height;
   final MainAxisAlignment? alignment;
   final bool isSecondary;
+  final bool isCancel;
   final bool showArrow;
   final TextStyle? textStyle;
   final bool loading;
@@ -32,6 +34,7 @@ class Button extends StatefulWidget {
     this.width,
     this.height,
     this.alignment,
+    this.isCancel = false,
     this.isSecondary = false,
     this.showArrow = false,
     this.textStyle,
@@ -48,7 +51,9 @@ class _ButtonState extends State<Button> {
   @override
   build(BuildContext context) {
     ButtonStyle style =
-        widget.isSecondary
+        widget.isCancel
+            ? cancelButtonTheme.style!
+            : widget.isSecondary
             ? secondaryButtonTheme.style!
             : primaryButtonTheme.style!;
     TextStyle textStyle = style.textStyle!.resolve({})!;
@@ -56,9 +61,7 @@ class _ButtonState extends State<Button> {
     final TextStyle resolvedTextStyle =
         widget.textStyle ??
         (isDisabled
-            ? textStyle.copyWith(
-              color: AppColors.gray1.withValues(alpha: 0.45),
-            )
+            ? textStyle.copyWith(color: AppColors.gray1.withValues(alpha: 0.45))
             : textStyle);
     return SizedBox(
       width: widget.width,

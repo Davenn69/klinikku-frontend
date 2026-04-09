@@ -12,4 +12,15 @@ class BookingDetailServices extends BaseService {
       return e;
     }
   }
+
+  deleteBooking(String id) async {
+    try {
+      final response = await delete(url: '/encounters/$id');
+      print(response);
+      return response;
+    } on DioException catch (e) {
+      print('error delete booking detail $e');
+      return e;
+    }
+  }
 }
