@@ -16,11 +16,8 @@ class BookingConfirmationView extends StatelessWidget {
   const BookingConfirmationView({super.key, required this.data});
 
   @override
-  Widget build(BuildContext context) => BaseView(
-    provider: bookingConfirmationVm,
-    backgroundColor: const Color(0xFFF7F7F4),
-    builder: _buildScreen,
-  );
+  Widget build(BuildContext context) =>
+      BaseView(provider: bookingConfirmationVm, builder: _buildScreen);
 
   Widget _buildScreen(BuildContext context, BookingConfirmationVM vm) =>
       SafeArea(
@@ -165,7 +162,7 @@ class BookingConfirmationView extends StatelessWidget {
           data.appointment.timeRangeText,
           valueStyle: textTheme.body4.copyWith(
             color: AppColors.primary,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w800,
           ),
         ),
       ],

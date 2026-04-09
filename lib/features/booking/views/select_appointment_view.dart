@@ -119,7 +119,7 @@ class SelectAppointmentView extends StatelessWidget {
   Widget _buildHeader(BuildContext context) => Container(
     width: double.infinity,
     padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 26.h),
-    decoration: const BoxDecoration(color: Color(0xFF3A7F77)),
+    decoration: const BoxDecoration(color: AppColors.primary),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
