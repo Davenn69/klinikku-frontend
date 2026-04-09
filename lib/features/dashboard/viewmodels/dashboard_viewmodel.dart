@@ -1,38 +1,37 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:klinikku/cores/bases/base_notifier.dart';
+import 'package:klinikku/cores/configs/flavor_config.dart';
 import 'package:klinikku/cores/mixins/toast_mixin.dart';
 import 'package:klinikku/cores/router/route_constant.dart';
+import 'package:klinikku/cores/utils/hive_helper.dart';
+import 'package:klinikku/features/booking/models/booking_model.dart';
 import 'package:klinikku/features/dashboard/models/dashboard_nav_item.dart';
 import 'package:klinikku/features/dashboard/models/dashboard_quick_action.dart';
-import 'package:klinikku/features/dashboard/models/dashboard_stat.dart';
-import 'package:klinikku/features/dashboard/models/upcoming_booking.dart';
+import 'package:klinikku/features/dashboard/models/profile_model.dart';
+import 'package:klinikku/features/dashboard/services/dashboard_services.dart';
 
 final dashboardVM = ChangeNotifierProvider.autoDispose(DashboardVM.new);
 
 class DashboardVM extends BaseNotifier with ToastMixin {
-  late List<DashboardStat> stats;
   late List<DashboardQuickAction> quickActions;
-  late UpcomingBooking upcomingBooking;
+  late BookingModel recentBooking;
   late List<DashboardNavItem> navigationItems;
+  late ProfileModel profile;
 
-  String greetingName = 'Budi';
   String currentDateLabel = 'Selasa, 7 April 2026';
   int selectedNavIndex = 0;
+
+  final DashboardServices _services = DashboardServices();
 
   DashboardVM(super.ref);
 
   @override
-  FutureOr<void> init() {
-    stats = const [
-      DashboardStat(value: '2', label: 'Booking Aktif'),
-      DashboardStat(value: '5', label: 'Total Kunjungan'),
-      DashboardStat(value: '3', label: 'Dokter Pernah Dikunjungi'),
-    ];
-
+  FutureOr<void> init() async {
     quickActions = [
       DashboardQuickAction(
         title: 'Buat Booking',
@@ -54,20 +53,7 @@ class DashboardVM extends BaseNotifier with ToastMixin {
       ),
     ];
 
-    upcomingBooking = const UpcomingBooking(
-      scheduleLabel: 'BESOK • 08:00 - 08:30',
-      doctorName: 'dr. Andi Wijaya, Sp.PD',
-      specialization: 'Penyakit Dalam · RS Klinik Surabaya',
-      status: 'BOOKED',
-      bookingCode: 'BKG-20260407-001',
-    );
-
-    navigationItems = const [
-      DashboardNavItem(label: 'Beranda', icon: Icons.home_rounded),
-      DashboardNavItem(label: 'Booking', icon: Icons.calendar_today_rounded),
-      DashboardNavItem(label: 'Riwayat', icon: Icons.receipt_long_rounded),
-      DashboardNavItem(label: 'Profil', icon: Icons.person_rounded),
-    ];
+    await getDashboardData();
   }
 
   void goToSelectAppointment() {
@@ -85,5 +71,30 @@ class DashboardVM extends BaseNotifier with ToastMixin {
   void onNavTap(int index) {
     selectedNavIndex = index;
     notifyListeners();
+  }
+
+  Future<void> logout() async {
+    isLoading = true;
+    await HiveHelper.clearSession();
+    FlavorConfig.instance?.values.token = '';
+    isLoading = false;
+    ctx.pushReplacementNamed(RouterRoutes.login.name);
+  }
+
+  getDashboardData() async {
+    final response = await _services.getDashboardData();
+
+    if (response is DioException) {
+      String errorMsg =
+          response.response == null
+              ? "Internal server error."
+              : response.response!.data['error']['message'];
+      showErrorToast(errorMsg);
+      return;
+    }
+
+    final data = response.data;
+    recentBooking = BookingModel.fromResponseBody(data['recentBooking']);
+    profile = ProfileModel.fromResponseBody(data['user']);
   }
 }

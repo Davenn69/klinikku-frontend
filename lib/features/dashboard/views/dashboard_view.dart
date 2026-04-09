@@ -4,9 +4,11 @@ import 'package:gap/gap.dart';
 import 'package:klinikku/cores/bases/base_view.dart';
 import 'package:klinikku/cores/constants/colors.dart';
 import 'package:klinikku/cores/constants/text_theme.dart';
+import 'package:klinikku/cores/router/route_constant.dart';
 import 'package:klinikku/features/dashboard/viewmodels/dashboard_viewmodel.dart';
 import 'package:klinikku/features/dashboard/widgets/quick_action_card.dart';
-import 'package:klinikku/features/dashboard/widgets/stat_card.dart';
+
+enum _ProfileMenuAction { logout }
 
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
@@ -28,23 +30,19 @@ class DashboardView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildHeroSection(vm),
-                Transform.translate(
-                  offset: Offset(0, -36.h),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 18.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildStatsRow(vm),
-                        Gap(16.h),
-                        _buildSectionTitle('Aksi Cepat'),
-                        Gap(16.h),
-                        _buildQuickActions(vm),
-                        _buildSectionTitle('Booking Terdekat'),
-                        Gap(16.h),
-                        _buildUpcomingBooking(vm),
-                      ],
-                    ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 18.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Gap(16.h),
+                      _buildSectionTitle('Aksi Cepat'),
+                      Gap(16.h),
+                      _buildQuickActions(vm),
+                      _buildSectionTitle('Booking Terdekat'),
+                      Gap(16.h),
+                      _buildUpcomingBooking(vm),
+                    ],
                   ),
                 ),
               ],
@@ -85,25 +83,57 @@ class DashboardView extends StatelessWidget {
                   ),
                   Gap(4.h),
                   Text(
-                    'Halo, ${vm.greetingName}! 👋',
+                    'Halo, ${vm.profile.name}! 👋',
                     style: textTheme.headline1.copyWith(height: 1.2),
                   ),
                 ],
               ),
             ),
-            Container(
-              width: 44.w,
-              height: 44.w,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: AppColors.white.withValues(alpha: 0.22),
-                shape: BoxShape.circle,
+            PopupMenuButton<_ProfileMenuAction>(
+              position: PopupMenuPosition.under,
+              offset: Offset(0, 12.h),
+              color: AppColors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.r),
               ),
-              child: Text(
-                'BS',
-                style: textTheme.body5.copyWith(
-                  color: AppColors.white,
-                  fontWeight: FontWeight.w700,
+              onSelected: (action) {
+                switch (action) {
+                  case _ProfileMenuAction.logout:
+                    _confirmLogout(ctx, vm);
+                    break;
+                }
+              },
+              itemBuilder:
+                  (context) => [
+                    PopupMenuItem(
+                      value: _ProfileMenuAction.logout,
+                      child: Row(
+                        children: [
+                          Text(
+                            'Logout',
+                            style: textTheme.body5.copyWith(
+                              color: AppColors.black,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+              child: Container(
+                width: 44.w,
+                height: 44.w,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: AppColors.white.withValues(alpha: 0.22),
+                  shape: BoxShape.circle,
+                ),
+                child: Text(
+                  vm.profile.name.isNotEmpty ? vm.profile.name[0] : '?',
+                  style: textTheme.body5.copyWith(
+                    color: AppColors.white,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ),
@@ -111,20 +141,6 @@ class DashboardView extends StatelessWidget {
         ),
       ],
     ),
-  );
-
-  Widget _buildStatsRow(DashboardVM vm) => Row(
-    children:
-        vm.stats
-            .map(
-              (stat) => Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4.w),
-                  child: StatCard(stat: stat),
-                ),
-              ),
-            )
-            .toList(),
   );
 
   Widget _buildSectionTitle(String title) =>
@@ -177,7 +193,7 @@ class DashboardView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                vm.upcomingBooking.scheduleLabel,
+                vm.recentBooking.appointmentSlot.date,
                 style: textTheme.caption1.copyWith(
                   color: AppColors.primary,
                   fontWeight: FontWeight.w700,
@@ -185,18 +201,19 @@ class DashboardView extends StatelessWidget {
               ),
               Gap(8.h),
               Text(
-                vm.upcomingBooking.doctorName,
+                vm.recentBooking.doctor.name,
                 style: textTheme.body2.copyWith(fontWeight: FontWeight.w700),
               ),
               Text(
-                vm.upcomingBooking.specialization,
+                vm.recentBooking.doctor.specialization,
                 style: textTheme.body6.copyWith(color: AppColors.gray1),
               ),
               Gap(16.h),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    vm.upcomingBooking.status,
+                    vm.recentBooking.statusLabel,
                     style: textTheme.body5.copyWith(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w700,
@@ -205,7 +222,7 @@ class DashboardView extends StatelessWidget {
                   Gap(22.w),
                   Expanded(
                     child: Text(
-                      vm.upcomingBooking.bookingCode,
+                      vm.recentBooking.bookingCode,
                       style: textTheme.body6.copyWith(color: AppColors.gray1),
                     ),
                   ),
@@ -217,4 +234,46 @@ class DashboardView extends StatelessWidget {
       ],
     ),
   );
+
+  Future<void> _confirmLogout(BuildContext context, DashboardVM vm) async {
+    final shouldLogout = await showDialog<bool>(
+      context: context,
+      builder:
+          (dialogContext) => AlertDialog(
+            title: Text(
+              'Logout',
+              style: textTheme.headline1.copyWith(color: AppColors.black),
+            ),
+            content: Text(
+              'Apakah kamu yakin ingin keluar dari akun ini?',
+              style: textTheme.body6.copyWith(color: AppColors.black),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.r),
+            ),
+            actionsPadding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 12.h),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(false),
+                child: Text(
+                  'Batal',
+                  style: textTheme.body6.copyWith(color: AppColors.black),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.of(dialogContext).pop(true),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.warning,
+                  foregroundColor: AppColors.white,
+                ),
+                child: Text('Logout'),
+              ),
+            ],
+          ),
+    );
+
+    if (shouldLogout == true) {
+      await vm.logout();
+    }
+  }
 }
