@@ -54,7 +54,6 @@ class BookingDetailVM extends BaseNotifier with ToastMixin {
     showSuccessToast('This appointment has been cancelled');
 
     ref.invalidate(bookingListVM);
-
     ctx.pop();
   }
 }

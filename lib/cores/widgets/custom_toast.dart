@@ -66,7 +66,7 @@ class CustomToast extends StatelessWidget {
                     text,
                     style: textTheme.body6.copyWith(
                       color: customTextColor ?? AppColors.white,
-                      fontFamily: 'rubik',
+                      fontFamily: 'DMSans',
                     ),
                     maxLines: 3,
                   ),

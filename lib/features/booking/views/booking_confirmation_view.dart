@@ -127,7 +127,7 @@ class BookingConfirmationView extends StatelessWidget {
             ),
           ),
         ),
-        Gap(18.h),
+        Gap(16.h),
         Text(
           'Konfirmasi Booking',
           style: textTheme.headline1.copyWith(
