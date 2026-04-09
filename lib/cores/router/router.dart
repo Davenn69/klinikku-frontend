@@ -7,6 +7,7 @@ import 'package:klinikku/features/booking/models/booking_confirmation_model.dart
 import 'package:klinikku/features/booking/models/doctor_model.dart';
 import 'package:klinikku/features/booking/models/region_model.dart';
 import 'package:klinikku/features/booking/views/booking_confirmation_view.dart';
+import 'package:klinikku/features/booking/views/booking_detail_view.dart';
 import 'package:klinikku/features/booking/views/booking_list_view.dart';
 import 'package:klinikku/features/booking/views/select_appointment_view.dart';
 import 'package:klinikku/features/dashboard/views/dashboard_view.dart';
@@ -63,6 +64,15 @@ setUpRoute({required String initialRoute}) {
               appointment: appointment,
             ),
           );
+        },
+      ),
+      GoRoute(
+        path: RouterRoutes.bookingDetail.path,
+        name: RouterRoutes.bookingDetail.name,
+        builder: (context, state) {
+          final data = state.extra as Map<String, dynamic>;
+          final id = data['id'];
+          return BookingDetailView(bookingId: id);
         },
       ),
     ],

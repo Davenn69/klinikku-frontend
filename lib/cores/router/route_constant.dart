@@ -23,6 +23,10 @@ class RouterRoutes {
     path: '/bookingConfirmation',
     name: 'bookingConfirmation',
   );
+  static const bookingDetail = RouterRoute(
+    path: '/bookingDetail',
+    name: 'bookingDetail',
+  );
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
