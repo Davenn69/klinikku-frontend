@@ -23,7 +23,7 @@ class DashboardVM extends BaseNotifier with ToastMixin {
   late List<DashboardNavItem> navigationItems;
   late ProfileModel profile;
 
-  String currentDateLabel = 'Selasa, 7 April 2026';
+  DateTime currentDateLabel = DateTime.now();
   int selectedNavIndex = 0;
 
   final DashboardServices _services = DashboardServices();

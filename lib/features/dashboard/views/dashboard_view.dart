@@ -5,6 +5,7 @@ import 'package:klinikku/cores/bases/base_view.dart';
 import 'package:klinikku/cores/constants/colors.dart';
 import 'package:klinikku/cores/constants/text_theme.dart';
 import 'package:klinikku/cores/router/route_constant.dart';
+import 'package:klinikku/cores/utils/datetime_extension.dart';
 import 'package:klinikku/features/dashboard/viewmodels/dashboard_viewmodel.dart';
 import 'package:klinikku/features/dashboard/widgets/quick_action_card.dart';
 
@@ -75,7 +76,7 @@ class DashboardView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    vm.currentDateLabel,
+                    vm.currentDateLabel.toIndonesianDayDateString(),
                     style: textTheme.caption2.copyWith(
                       color: AppColors.gray3,
                       fontWeight: FontWeight.w400,
@@ -193,7 +194,7 @@ class DashboardView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                vm.recentBooking.appointmentSlot.date,
+                "${vm.recentBooking.appointmentSlot.startTime} - ${vm.recentBooking.appointmentSlot.endTime}",
                 style: textTheme.caption1.copyWith(
                   color: AppColors.primary,
                   fontWeight: FontWeight.w700,
