@@ -42,6 +42,7 @@ class SelectAppointmentView extends StatelessWidget {
                 CustomDropdownButton<DoctorModel>(
                   options: vm.doctors,
                   hint: 'Pilih dokter',
+                  isDisabled: vm.form.region.selectedValue == null,
                   label: 'DOKTER',
                   inputModel: vm.form.doctor,
                   getLabel: (value) => value?.name ?? '',
@@ -71,13 +72,19 @@ class SelectAppointmentView extends StatelessWidget {
                     },
                   ),
                 ),
-                Gap(14.h),
-                Text(
-                  'Menampilkan 4 slot untuk ${vm.selectedDateText}',
-                  style: textTheme.body6.copyWith(color: AppColors.gray1),
-                ),
-                if (vm.slots.isNotEmpty) ...[
-                  Gap(16.h),
+                Gap(16.h),
+                if (vm.slots.isEmpty)
+                  if (vm.form.doctor.selectedValue != null &&
+                      vm.form.region.selectedValue != null &&
+                      vm.form.date.selectedValue != null) ...[
+                    _buildEmptyState(),
+                  ] else
+                    ...[]
+                else ...[
+                  Text(
+                    'Menampilkan ${vm.slots.length} slot untuk ${vm.selectedDateText}',
+                    style: textTheme.body6.copyWith(color: AppColors.gray1),
+                  ),
                   Column(
                     children:
                         vm.slots.map((slot) {
@@ -148,6 +155,33 @@ class SelectAppointmentView extends StatelessWidget {
             color: AppColors.white,
             height: 1.1,
           ),
+        ),
+      ],
+    ),
+  );
+
+  Widget _buildEmptyState() => Container(
+    width: double.infinity,
+    padding: EdgeInsets.symmetric(vertical: 28.h, horizontal: 18.w),
+    decoration: BoxDecoration(
+      color: AppColors.white,
+      borderRadius: BorderRadius.circular(20.r),
+      border: Border.all(color: AppColors.gray2),
+    ),
+    child: Column(
+      children: [
+        Icon(Icons.event_busy_outlined, size: 34.sp, color: AppColors.gray1),
+        Gap(10.h),
+        Text(
+          'Belum ada slot tersedia',
+          style: textTheme.body5.copyWith(fontWeight: FontWeight.w700),
+          textAlign: TextAlign.center,
+        ),
+        Gap(4.h),
+        Text(
+          'Silakan coba tanggal lain atau cek kembali nanti.',
+          style: textTheme.body6.copyWith(color: AppColors.gray1),
+          textAlign: TextAlign.center,
         ),
       ],
     ),

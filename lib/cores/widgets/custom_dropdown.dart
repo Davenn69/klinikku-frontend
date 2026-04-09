@@ -230,7 +230,7 @@ class _CustomDropdownButtonState<T> extends State<CustomDropdownButton<T>> {
               color: errorMessage != null ? AppColors.warning : AppColors.gray2,
               width: 1,
             ),
-            color: widget.isDisabled ? AppColors.gray1 : AppColors.white,
+            color: widget.isDisabled ? AppColors.gray2 : AppColors.white,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -253,8 +253,7 @@ class _CustomDropdownButtonState<T> extends State<CustomDropdownButton<T>> {
                 children: [
                   Icon(
                     Icons.keyboard_arrow_down_rounded,
-                    color:
-                        widget.isDisabled ? AppColors.gray3 : AppColors.black,
+                    color: AppColors.gray1,
                     size: 24.w,
                   ),
                 ],
