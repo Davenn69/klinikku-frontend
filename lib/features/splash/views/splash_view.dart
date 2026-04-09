@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:klinikku/cores/configs/flavor_config.dart';
 import 'package:klinikku/cores/constants/colors.dart';
 import 'package:klinikku/cores/constants/text_theme.dart';
 import 'package:klinikku/cores/mixins/toast_mixin.dart';
@@ -40,6 +41,8 @@ class _SplashViewState extends State<SplashView> with ToastMixin {
       accessToken: accessTokens,
       refreshToken: refreshTokens,
     );
+
+    FlavorConfig.instance!.values.token = accessTokens;
 
     return {'accessToken': accessTokens, 'refreshToken': refreshTokens};
   }
