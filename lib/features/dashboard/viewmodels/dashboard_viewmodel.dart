@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:klinikku/cores/bases/base_notifier.dart';
 import 'package:klinikku/cores/mixins/toast_mixin.dart';
+import 'package:klinikku/cores/router/route_constant.dart';
 import 'package:klinikku/features/dashboard/models/dashboard_nav_item.dart';
 import 'package:klinikku/features/dashboard/models/dashboard_quick_action.dart';
 import 'package:klinikku/features/dashboard/models/dashboard_stat.dart';
@@ -31,30 +33,38 @@ class DashboardVM extends BaseNotifier with ToastMixin {
       DashboardStat(value: '3', label: 'Dokter Pernah Dikunjungi'),
     ];
 
-    quickActions = const [
+    quickActions = [
       DashboardQuickAction(
         title: 'Buat Booking',
         icon: Icons.event_available_rounded,
         iconBackgroundColor: Color(0xFFE2F1EE),
         iconColor: Color(0xFF3A7F77),
+        onTap: () {
+          goToSelectAppointment();
+        },
       ),
       DashboardQuickAction(
         title: 'Riwayat Booking',
         icon: Icons.assignment_rounded,
         iconBackgroundColor: Color(0xFFF8ECD8),
         iconColor: Color(0xFFE0A548),
+        onTap: () {
+          goToBookingList();
+        },
       ),
       DashboardQuickAction(
         title: 'Dokter Tersedia',
         icon: Icons.check_circle_rounded,
         iconBackgroundColor: Color(0xFFE4F3E6),
         iconColor: Color(0xFF54A066),
+        onTap: () {},
       ),
       DashboardQuickAction(
         title: 'Pilih Region',
         icon: Icons.location_on_rounded,
         iconBackgroundColor: Color(0xFFE5ECFB),
         iconColor: Color(0xFF4D73BE),
+        onTap: () {},
       ),
     ];
 
@@ -72,6 +82,14 @@ class DashboardVM extends BaseNotifier with ToastMixin {
       DashboardNavItem(label: 'Riwayat', icon: Icons.receipt_long_rounded),
       DashboardNavItem(label: 'Profil', icon: Icons.person_rounded),
     ];
+  }
+
+  void goToSelectAppointment() {
+    ctx.pushNamed(RouterRoutes.selectAppointment.name);
+  }
+
+  void goToBookingList() {
+    ctx.pushNamed(RouterRoutes.bookingList.name);
   }
 
   void onQuickActionTap(DashboardQuickAction action) {
