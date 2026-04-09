@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:klinikku/cores/router/route_constant.dart';
 import 'package:klinikku/features/auth/views/login_view.dart';
+import 'package:klinikku/features/auth/views/register_view.dart';
 import 'package:klinikku/features/booking/models/appointment_slot_item.dart';
 import 'package:klinikku/features/booking/models/booking_confirmation_model.dart';
 import 'package:klinikku/features/booking/models/doctor_model.dart';
@@ -32,6 +33,11 @@ setUpRoute({required String initialRoute}) {
         path: RouterRoutes.login.path,
         name: RouterRoutes.login.name,
         builder: (context, state) => LoginView(),
+      ),
+      GoRoute(
+        path: RouterRoutes.register.path,
+        name: RouterRoutes.register.name,
+        builder: (context, state) => RegisterView(),
       ),
       GoRoute(
         path: RouterRoutes.dashboard.path,

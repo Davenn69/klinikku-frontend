@@ -69,7 +69,7 @@ class _TextTheme {
   );
 
   final caption1 = TextStyle(
-    fontSize: 12.sp,
+    fontSize: 13.sp,
     fontWeight: FontWeight.w600,
     color: AppColors.gray1,
     height: 1.5,

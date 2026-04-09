@@ -35,6 +35,7 @@ class CustomTextField extends StatefulWidget {
   final Color? borderColor;
   final InlineSpan? toolTip;
   final Color? hintColor;
+  final bool isPassword;
 
   const CustomTextField({
     super.key,
@@ -66,6 +67,7 @@ class CustomTextField extends StatefulWidget {
     this.borderColor,
     this.toolTip,
     this.hintColor,
+    this.isPassword = false,
   });
 
   @override
@@ -74,6 +76,7 @@ class CustomTextField extends StatefulWidget {
 
 class _CustomTextFieldState extends State<CustomTextField> {
   String? errorMessage;
+  bool showPassword = false;
 
   InputBorder getBorder(Color color) => OutlineInputBorder(
     borderRadius: widget.borderRadius ?? BorderRadius.circular(12.r),
@@ -104,6 +107,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
         child: TextFormField(
           expands: widget.isLarge,
           maxLines: widget.isLarge ? null : 1,
+          obscureText: widget.isPassword ? !showPassword : false,
+          enableSuggestions: !widget.isPassword,
+          autocorrect: !widget.isPassword,
           textAlignVertical:
               widget.isLarge ? TextAlignVertical.top : TextAlignVertical.center,
           focusNode: widget.focusNode,
@@ -113,7 +119,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
           autofocus: widget.autoFocus,
           textInputAction: widget.inputAction,
           enabled: widget.enabled,
-          keyboardType: widget.keyboardType,
+          keyboardType:
+              widget.keyboardType ??
+              (widget.isPassword ? TextInputType.visiblePassword : null),
           controller: widget.inputModel.controller,
           onChanged: (value) {
             setState(() {
@@ -149,10 +157,26 @@ class _CustomTextFieldState extends State<CustomTextField> {
               maxWidth: 120.w,
               maxHeight: 23.h,
             ),
-            suffixIcon: widget.suffixWidget,
+            suffixIcon:
+                widget.isPassword
+                    ? IconButton(
+                      onPressed: () {
+                        setState(() {
+                          showPassword = !showPassword;
+                        });
+                      },
+                      icon: Icon(
+                        !showPassword
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        color: AppColors.gray1,
+                        size: 20.sp,
+                      ),
+                    )
+                    : widget.suffixWidget,
             suffixIconConstraints: BoxConstraints(
               maxWidth: 56.w,
-              maxHeight: 23.h,
+              maxHeight: 63.h,
             ),
           ),
           style: (widget.style ?? textTheme.body6).copyWith(
@@ -175,7 +199,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 errorMessage = message;
               });
             }
-            widget.onValidate?.call(message!);
+            widget.onValidate?.call(message ?? '');
             return message;
           },
           onFieldSubmitted: widget.onSubmit,
