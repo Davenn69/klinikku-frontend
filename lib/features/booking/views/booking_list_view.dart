@@ -6,6 +6,7 @@ import 'package:klinikku/cores/bases/base_view.dart';
 import 'package:klinikku/cores/constants/colors.dart';
 import 'package:klinikku/cores/constants/text_theme.dart';
 import 'package:klinikku/cores/router/route_constant.dart';
+import 'package:klinikku/cores/utils/datetime_extension.dart';
 import 'package:klinikku/cores/widgets/tap_detector.dart';
 import 'package:klinikku/features/booking/models/booking_model.dart';
 import 'package:klinikku/features/booking/viewmodels/booking_list_viewmodel.dart';
@@ -257,7 +258,7 @@ class _BookingCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  '${item.appointmentSlot.date} | ${item.appointmentSlot.timeRangeText}',
+                  '${item.appointmentSlot.date.toIndonesianShortDayDateString()} | ${item.appointmentSlot.timeRangeText}',
                   style: textTheme.body6.copyWith(
                     color: AppColors.gray1,
                     fontWeight: FontWeight.w500,

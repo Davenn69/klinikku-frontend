@@ -6,6 +6,7 @@ import 'package:klinikku/cores/bases/base_view.dart';
 import 'package:klinikku/cores/constants/colors.dart';
 import 'package:klinikku/cores/constants/text_theme.dart';
 import 'package:klinikku/cores/router/route_constant.dart';
+import 'package:klinikku/cores/utils/datetime_extension.dart';
 import 'package:klinikku/cores/widgets/custom_button.dart';
 import 'package:klinikku/features/booking/models/booking_model.dart';
 import 'package:klinikku/features/booking/viewmodels/booking_detail_viewmodel.dart';
@@ -55,7 +56,10 @@ class BookingDetailView extends StatelessWidget {
                     height: 1.2,
                   ),
                 ),
-                _buildInfoRow('Tanggal', vm.detail.appointmentSlot.date),
+                _buildInfoRow(
+                  'Tanggal',
+                  vm.detail.appointmentSlot.date.toIndonesianDayDateString(),
+                ),
                 _buildDivider(),
                 _buildInfoRow(
                   'Jam',

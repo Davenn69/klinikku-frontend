@@ -1,8 +1,10 @@
+import 'package:klinikku/cores/utils/datetime_helper.dart';
+
 class AppointmentSlotItem {
   final String id;
   final String doctorId;
   final String regionId;
-  final String date;
+  final DateTime date;
   final String startTime;
   final String endTime;
   final int maxCapacity;
@@ -28,7 +30,7 @@ class AppointmentSlotItem {
         id: json['id'],
         doctorId: json['doctorId'],
         regionId: json['regionId'],
-        date: json['date'],
+        date: DateTimeHelper.tryParse(json['date']) ?? DateTime.now(),
         startTime: json['startTime'],
         endTime: json['endTime'],
         maxCapacity: json['maxCapacity'],

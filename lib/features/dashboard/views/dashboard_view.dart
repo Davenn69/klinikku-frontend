@@ -194,7 +194,7 @@ class DashboardView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${vm.recentBooking.appointmentSlot.startTime} - ${vm.recentBooking.appointmentSlot.endTime}",
+                "${vm.recentBooking.appointmentSlot.date.toIndonesianShortDayDateString()} | ${vm.recentBooking.appointmentSlot.timeRangeText}",
                 style: textTheme.caption1.copyWith(
                   color: AppColors.primary,
                   fontWeight: FontWeight.w700,

@@ -6,6 +6,7 @@ import 'package:klinikku/cores/bases/base_view.dart';
 import 'package:klinikku/cores/constants/colors.dart';
 import 'package:klinikku/cores/constants/text_theme.dart';
 import 'package:klinikku/cores/router/route_constant.dart';
+import 'package:klinikku/cores/utils/datetime_extension.dart';
 import 'package:klinikku/cores/widgets/custom_button.dart';
 import 'package:klinikku/cores/widgets/custom_text_field.dart';
 import 'package:klinikku/features/booking/models/booking_confirmation_model.dart';
@@ -155,7 +156,10 @@ class BookingConfirmationView extends StatelessWidget {
         Gap(10.h),
         _buildDetailRow('Region', data.region.name),
         Gap(10.h),
-        _buildDetailRow('Tanggal', data.appointment.date),
+        _buildDetailRow(
+          'Tanggal',
+          data.appointment.date.toIndonesianDayDateString(),
+        ),
         Gap(10.h),
         _buildDetailRow(
           'Jam',
