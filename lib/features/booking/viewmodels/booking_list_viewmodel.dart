@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:klinikku/cores/bases/base_notifier.dart';
 import 'package:klinikku/cores/mixins/toast_mixin.dart';
-import 'package:klinikku/features/booking/models/booking_list_item_model.dart';
+import 'package:klinikku/features/booking/models/booking_model.dart';
 import 'package:klinikku/features/booking/services/booking_list_services.dart';
 
 final bookingListVM = ChangeNotifierProvider.autoDispose<BookingListVM>(
@@ -11,7 +11,7 @@ final bookingListVM = ChangeNotifierProvider.autoDispose<BookingListVM>(
 );
 
 class BookingListVM extends BaseNotifier with ToastMixin {
-  late List<BookingListItemModel> bookings;
+  late List<BookingModel> bookings;
   late List<String> filterLabels;
 
   int selectedFilterIndex = 0;
@@ -24,45 +24,10 @@ class BookingListVM extends BaseNotifier with ToastMixin {
   FutureOr<void> init() async {
     filterLabels = const ['Semua', 'Aktif', 'Selesai', 'Dibatalkan'];
 
-    bookings = const [
-      BookingListItemModel(
-        bookingCode: 'BKG-20260407-001',
-        doctorName: 'dr. Nina Kusuma, Sp.A',
-        specialization: 'Anak',
-        regionName: 'Surabaya',
-        status: BookingListStatus.booked,
-        dateTimeLabel: 'Sel, 7 Apr · 11:00',
-      ),
-      BookingListItemModel(
-        bookingCode: 'BKG-20260407-002',
-        doctorName: 'dr. Dewi Anggraeni, Sp.JP',
-        specialization: 'Jantung',
-        regionName: 'Jakarta',
-        status: BookingListStatus.confirmed,
-        dateTimeLabel: 'Sel, 7 Apr · 13:00',
-      ),
-      BookingListItemModel(
-        bookingCode: 'BKG-20260301-001',
-        doctorName: 'dr. Andi Wijaya, Sp.PD',
-        specialization: 'Penyakit Dalam',
-        regionName: 'Surabaya',
-        status: BookingListStatus.selesai,
-        dateTimeLabel: 'Min, 1 Mar · 08:00',
-      ),
-      BookingListItemModel(
-        bookingCode: 'BKG-20260320-001',
-        doctorName: 'dr. Ratna Sari, Sp.KK',
-        specialization: 'Kulit dan Kelamin',
-        regionName: 'Bandung',
-        status: BookingListStatus.batal,
-        dateTimeLabel: 'Kam, 20 Mar · 10:30',
-      ),
-    ];
-
     await getBookingList();
   }
 
-  List<BookingListItemModel> get filteredBookings {
+  List<BookingModel> get filteredBookings {
     switch (selectedFilterIndex) {
       case 1:
         return bookings
@@ -74,11 +39,11 @@ class BookingListVM extends BaseNotifier with ToastMixin {
             .toList();
       case 2:
         return bookings
-            .where((item) => item.status == BookingListStatus.selesai)
+            .where((item) => item.status == BookingListStatus.done)
             .toList();
       case 3:
         return bookings
-            .where((item) => item.status == BookingListStatus.batal)
+            .where((item) => item.status == BookingListStatus.cancelled)
             .toList();
       default:
         return bookings;
@@ -105,5 +70,9 @@ class BookingListVM extends BaseNotifier with ToastMixin {
     }
 
     final data = response.data['encounter'];
+    bookings =
+        (data as List<dynamic>)
+            .map((item) => BookingModel.fromResponseBody(item))
+            .toList();
   }
 }

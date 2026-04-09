@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:klinikku/cores/bases/base_view.dart';
 import 'package:klinikku/cores/constants/colors.dart';
 import 'package:klinikku/cores/constants/text_theme.dart';
-import 'package:klinikku/features/booking/models/booking_list_item_model.dart';
+import 'package:klinikku/features/booking/models/booking_model.dart';
 import 'package:klinikku/features/booking/viewmodels/booking_list_viewmodel.dart';
 
 class BookingListView extends StatelessWidget {
@@ -167,7 +167,7 @@ class BookingListView extends StatelessWidget {
 }
 
 class _BookingCard extends StatelessWidget {
-  final BookingListItemModel item;
+  final BookingModel item;
 
   const _BookingCard({required this.item});
 
@@ -206,7 +206,7 @@ class _BookingCard extends StatelessWidget {
                   ),
                   Gap(4.h),
                   Text(
-                    item.doctorName,
+                    item.doctor.name,
                     style: textTheme.body2.copyWith(
                       fontWeight: FontWeight.w800,
                       height: 1.2,
@@ -214,7 +214,7 @@ class _BookingCard extends StatelessWidget {
                   ),
                   Gap(2.h),
                   Text(
-                    '${item.specialization} · ${item.regionName}',
+                    '${item.doctor.specialization} · ${item.region.name}',
                     style: textTheme.body6.copyWith(color: AppColors.gray1),
                   ),
                 ],
@@ -245,7 +245,7 @@ class _BookingCard extends StatelessWidget {
             Gap(8.w),
             Expanded(
               child: Text(
-                item.dateTimeLabel,
+                item.appointmentSlot.timeRangeText,
                 style: textTheme.body6.copyWith(
                   color: AppColors.gray1,
                   fontWeight: FontWeight.w500,
