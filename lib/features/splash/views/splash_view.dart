@@ -86,7 +86,7 @@ class _SplashViewState extends State<SplashView> with ToastMixin {
     child: Center(
       child: Text(
         'KlinikKu',
-        style: textTheme.headline1.copyWith(fontSize: 32.sp),
+        style: textTheme.headline1.copyWith(fontSize: 32.sp, height: 1.0, decoration : TextDecoration.none),
       ),
     ),
   );
