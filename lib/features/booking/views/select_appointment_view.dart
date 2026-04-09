@@ -15,11 +15,8 @@ class SelectAppointmentView extends StatelessWidget {
   const SelectAppointmentView({super.key});
 
   @override
-  Widget build(BuildContext context) => BaseView(
-    provider: selectAppointmentVm,
-    backgroundColor: const Color(0xFFF6F6F2),
-    builder: _buildScreen,
-  );
+  Widget build(BuildContext context) =>
+      BaseView(provider: selectAppointmentVm, builder: _buildScreen);
 
   Widget _buildScreen(BuildContext context, SelectAppointmentVM vm) => SafeArea(
     bottom: false,
@@ -119,7 +116,6 @@ class SelectAppointmentView extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Gap(16.h),
         InkWell(
           onTap: () => Navigator.of(context).maybePop(),
           borderRadius: BorderRadius.circular(12.r),
@@ -145,7 +141,7 @@ class SelectAppointmentView extends StatelessWidget {
             ),
           ),
         ),
-        Gap(18.h),
+        Gap(16.h),
         Text(
           'Cari Slot Appointment',
           style: textTheme.headline1.copyWith(

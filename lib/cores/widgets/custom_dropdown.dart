@@ -206,12 +206,8 @@ class _CustomDropdownButtonState<T> extends State<CustomDropdownButton<T>> {
       if (widget.label.isNotEmpty) ...[
         Text.rich(
           TextSpan(
-            style: textTheme.body6.copyWith(
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w500,
-              fontFamily: textTheme.body6.fontFamily,
-            ),
-            children: [TextSpan(text: widget.label)],
+            style: textTheme.caption1,
+            children: [TextSpan(text: widget.label.toUpperCase())],
           ),
         ),
         Gap(6.h),
@@ -231,7 +227,7 @@ class _CustomDropdownButtonState<T> extends State<CustomDropdownButton<T>> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: errorMessage != null ? AppColors.warning : AppColors.gray3,
+              color: errorMessage != null ? AppColors.warning : AppColors.gray2,
               width: 1,
             ),
             color: widget.isDisabled ? AppColors.gray1 : AppColors.white,
@@ -243,9 +239,9 @@ class _CustomDropdownButtonState<T> extends State<CustomDropdownButton<T>> {
                 selectedValue!.isEmpty ? widget.hint : selectedValue!,
                 style:
                     widget.isDisabled
-                        ? textTheme.body6.copyWith(color: AppColors.gray3)
+                        ? textTheme.body6.copyWith(color: AppColors.gray1)
                         : selectedValue!.isEmpty
-                        ? textTheme.body6.copyWith(color: AppColors.gray3)
+                        ? textTheme.body6.copyWith(color: AppColors.gray1)
                         : textTheme.body6.copyWith(
                           color:
                               errorMessage != null
