@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:klinikku/cores/bases/base_view.dart';
 import 'package:klinikku/cores/constants/colors.dart';
 import 'package:klinikku/cores/constants/text_theme.dart';
 import 'package:klinikku/cores/router/route_constant.dart';
 import 'package:klinikku/cores/utils/datetime_extension.dart';
+import 'package:klinikku/cores/widgets/tap_detector.dart';
 import 'package:klinikku/features/dashboard/viewmodels/dashboard_viewmodel.dart';
 import 'package:klinikku/features/dashboard/widgets/quick_action_card.dart';
 
@@ -40,9 +42,11 @@ class DashboardView extends StatelessWidget {
                       _buildSectionTitle('Aksi Cepat'),
                       Gap(16.h),
                       _buildQuickActions(vm),
-                      _buildSectionTitle('Booking Terdekat'),
-                      Gap(16.h),
-                      _buildUpcomingBooking(vm),
+                      if (vm.recentBooking != null) ...[
+                        _buildSectionTitle('Booking Terdekat'),
+                        Gap(16.h),
+                        _buildUpcomingBooking(vm),
+                      ],
                     ],
                   ),
                 ),
@@ -163,76 +167,84 @@ class DashboardView extends StatelessWidget {
     },
   );
 
-  Widget _buildUpcomingBooking(DashboardVM vm) => Container(
-    width: double.infinity,
-    padding: EdgeInsets.all(18.w),
-    decoration: BoxDecoration(
-      color: const Color(0xFFDDEDEC),
-      borderRadius: BorderRadius.circular(22.r),
-      boxShadow: [
-        BoxShadow(
-          color: AppColors.black.withValues(alpha: 0.05),
-          blurRadius: 18,
-          offset: const Offset(0, 10),
-        ),
-      ],
-    ),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: 4.w,
-          height: 108.h,
-          decoration: BoxDecoration(
-            color: AppColors.primary,
-            borderRadius: BorderRadius.circular(999.r),
+  Widget _buildUpcomingBooking(DashboardVM vm) => TapDetector(
+    onTap: () {
+      ctx.pushNamed(
+        RouterRoutes.bookingDetail.name,
+        extra: {'id': vm.recentBooking!.id},
+      );
+    },
+    child: Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(18.w),
+      decoration: BoxDecoration(
+        color: const Color(0xFFDDEDEC),
+        borderRadius: BorderRadius.circular(22.r),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withValues(alpha: 0.05),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
           ),
-        ),
-        Gap(14.w),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "${vm.recentBooking.appointmentSlot.date.toIndonesianShortDayDateString()} | ${vm.recentBooking.appointmentSlot.timeRangeText}",
-                style: textTheme.caption1.copyWith(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w700,
+        ],
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 4.w,
+            height: 108.h,
+            decoration: BoxDecoration(
+              color: AppColors.primary,
+              borderRadius: BorderRadius.circular(999.r),
+            ),
+          ),
+          Gap(14.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "${vm.recentBooking!.appointmentSlot.date.toIndonesianShortDayDateString()} | ${vm.recentBooking!.appointmentSlot.timeRangeText}",
+                  style: textTheme.caption1.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-              ),
-              Gap(8.h),
-              Text(
-                vm.recentBooking.doctor.name,
-                style: textTheme.body2.copyWith(fontWeight: FontWeight.w700),
-              ),
-              Text(
-                vm.recentBooking.doctor.specialization,
-                style: textTheme.body6.copyWith(color: AppColors.gray1),
-              ),
-              Gap(16.h),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    vm.recentBooking.statusLabel,
-                    style: textTheme.body5.copyWith(
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.w700,
+                Gap(8.h),
+                Text(
+                  vm.recentBooking!.doctor.name,
+                  style: textTheme.body2.copyWith(fontWeight: FontWeight.w700),
+                ),
+                Text(
+                  vm.recentBooking!.doctor.specialization,
+                  style: textTheme.body6.copyWith(color: AppColors.gray1),
+                ),
+                Gap(16.h),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      vm.recentBooking!.statusLabel,
+                      style: textTheme.body5.copyWith(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
-                  ),
-                  Gap(22.w),
-                  Expanded(
-                    child: Text(
-                      vm.recentBooking.bookingCode,
-                      style: textTheme.body6.copyWith(color: AppColors.gray1),
+                    Gap(22.w),
+                    Expanded(
+                      child: Text(
+                        vm.recentBooking!.bookingCode,
+                        style: textTheme.body6.copyWith(color: AppColors.gray1),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     ),
   );
 

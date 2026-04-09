@@ -8,6 +8,7 @@ import 'package:klinikku/cores/router/route_constant.dart';
 import 'package:klinikku/features/booking/models/booking_model.dart';
 import 'package:klinikku/features/booking/services/booking_detail_services.dart';
 import 'package:klinikku/features/booking/viewmodels/booking_list_viewmodel.dart';
+import 'package:klinikku/features/dashboard/viewmodels/dashboard_viewmodel.dart';
 
 class BookingDetailVM extends BaseNotifier with ToastMixin {
   final String bookingId;
@@ -54,6 +55,7 @@ class BookingDetailVM extends BaseNotifier with ToastMixin {
     showSuccessToast('This appointment has been cancelled');
 
     ref.invalidate(bookingListVM);
+    ref.invalidate(dashboardVM);
     ctx.pop();
   }
 }

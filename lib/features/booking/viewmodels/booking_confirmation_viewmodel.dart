@@ -10,6 +10,7 @@ import 'package:klinikku/cores/router/route_constant.dart';
 import 'package:klinikku/features/booking/models/booking_confirmation_form_model.dart';
 import 'package:klinikku/features/booking/services/booking_confirmation_services.dart';
 import 'package:klinikku/features/booking/viewmodels/select_appointment_viewmodel.dart';
+import 'package:klinikku/features/dashboard/viewmodels/dashboard_viewmodel.dart';
 
 final bookingConfirmationVm =
     ChangeNotifierProvider.autoDispose<BookingConfirmationVM>(
@@ -57,6 +58,7 @@ class BookingConfirmationVM
 
     showSuccessToast('Berhasil konfirmasi booking');
     ref.invalidate(selectAppointmentVm);
+    ref.invalidate(dashboardVM);
     final data = response.data['encounter'];
     ctx.pushReplacementNamed(
       RouterRoutes.bookingDetail.name,

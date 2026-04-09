@@ -19,7 +19,7 @@ final dashboardVM = ChangeNotifierProvider.autoDispose(DashboardVM.new);
 
 class DashboardVM extends BaseNotifier with ToastMixin {
   late List<DashboardQuickAction> quickActions;
-  late BookingModel recentBooking;
+  BookingModel? recentBooking;
   late List<DashboardNavItem> navigationItems;
   late ProfileModel profile;
 
@@ -94,7 +94,9 @@ class DashboardVM extends BaseNotifier with ToastMixin {
     }
 
     final data = response.data;
-    recentBooking = BookingModel.fromResponseBody(data['recentBooking']);
+    if (data['recentBooking'] != null) {
+      recentBooking = BookingModel.fromResponseBody(data['recentBooking']);
+    }
     profile = ProfileModel.fromResponseBody(data['user']);
   }
 }
