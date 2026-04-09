@@ -37,7 +37,7 @@ class LoginVM extends BaseFormNotifier<LoginFormModel>
             (value) => getValidation(
               value: value,
               label: 'Password',
-              validationList: [Validator.passwordFormat],
+              validationList: [],
             ),
       ),
     );

@@ -55,6 +55,7 @@ class BookingConfirmationVM
       return;
     }
 
+    showSuccessToast('Berhasil konfirmasi booking');
     ref.invalidate(selectAppointmentVm);
     final data = response.data['encounter'];
     ctx.pushReplacementNamed(

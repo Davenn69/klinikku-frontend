@@ -33,7 +33,7 @@ class CustomToast extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
         decoration: BoxDecoration(
-          color: AppColors.warning,
+          color: isSuccess ? AppColors.primary : AppColors.warning,
           borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
