@@ -44,27 +44,13 @@ class DashboardVM extends BaseNotifier with ToastMixin {
         },
       ),
       DashboardQuickAction(
-        title: 'Riwayat Booking',
+        title: 'Riwayat',
         icon: Icons.assignment_rounded,
         iconBackgroundColor: Color(0xFFF8ECD8),
         iconColor: Color(0xFFE0A548),
         onTap: () {
           goToBookingList();
         },
-      ),
-      DashboardQuickAction(
-        title: 'Dokter Tersedia',
-        icon: Icons.check_circle_rounded,
-        iconBackgroundColor: Color(0xFFE4F3E6),
-        iconColor: Color(0xFF54A066),
-        onTap: () {},
-      ),
-      DashboardQuickAction(
-        title: 'Pilih Region',
-        icon: Icons.location_on_rounded,
-        iconBackgroundColor: Color(0xFFE5ECFB),
-        iconColor: Color(0xFF4D73BE),
-        onTap: () {},
       ),
     ];
 

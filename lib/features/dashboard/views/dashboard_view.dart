@@ -41,7 +41,7 @@ class DashboardView extends StatelessWidget {
                         Gap(16.h),
                         _buildQuickActions(vm),
                         _buildSectionTitle('Booking Terdekat'),
-                        Gap(14.h),
+                        Gap(16.h),
                         _buildUpcomingBooking(vm),
                       ],
                     ),
@@ -217,51 +217,4 @@ class DashboardView extends StatelessWidget {
       ],
     ),
   );
-
-  // Widget _buildBottomNavigation(DashboardVM vm) => Container(
-  //   padding: EdgeInsets.fromLTRB(12.w, 10.h, 12.w, 20.h),
-  //   decoration: BoxDecoration(
-  //     color: AppColors.white,
-  //     boxShadow: [
-  //       BoxShadow(
-  //         color: AppColors.black.withValues(alpha: 0.05),
-  //         blurRadius: 18,
-  //         offset: const Offset(0, -4),
-  //       ),
-  //     ],
-  //   ),
-  //   child: Row(
-  //     children: List.generate(vm.navigationItems.length, (index) {
-  //       final item = vm.navigationItems[index];
-  //       final isSelected = vm.selectedNavIndex == index;
-
-  //       return Expanded(
-  //         child: InkWell(
-  //           onTap: () => vm.onNavTap(index),
-  //           borderRadius: BorderRadius.circular(16.r),
-  //           child: Padding(
-  //             padding: EdgeInsets.symmetric(vertical: 4.h),
-  //             child: Column(
-  //               mainAxisSize: MainAxisSize.min,
-  //               children: [
-  //                 Icon(
-  //                   item.icon,
-  //                   size: 22.sp,
-  //                   color: isSelected ? AppColors.primary : AppColors.gray1,
-  //                 ),
-  //                 Gap(4.h),
-  //                 Text(
-  //                   item.label,
-  //                   style: textTheme.caption1.copyWith(
-  //                     color: isSelected ? AppColors.primary : AppColors.gray1,
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //       );
-  //     }),
-  //   ),
-  // );
 }
