@@ -62,7 +62,10 @@ class SlotCard extends StatelessWidget {
           textStyle:
               slot.isAvailable
                   ? textTheme.button.copyWith(fontSize: 13.sp)
-                  : null,
+                  : textTheme.button.copyWith(
+                    fontSize: 13.sp,
+                    color: AppColors.gray1,
+                  ),
         ),
       ],
     ),

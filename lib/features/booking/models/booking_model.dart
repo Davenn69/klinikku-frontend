@@ -13,7 +13,7 @@ class BookingModel {
   final DoctorModel doctor;
   final RegionModel region;
   final AppointmentSlotItem appointmentSlot;
-  final String complaint;
+  final String? complaint;
   final BookingListStatus status;
   final String? cancelledReason;
 

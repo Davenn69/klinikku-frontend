@@ -86,22 +86,25 @@ class BookingDetailView extends StatelessWidget {
                     height: 1.2,
                   ),
                 ),
-                Gap(16.h),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(18.w),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF6F0E4),
-                    borderRadius: BorderRadius.circular(18.r),
-                  ),
-                  child: Text(
-                    vm.detail.complaint,
-                    style: textTheme.body5.copyWith(
-                      color: AppColors.black,
-                      height: 1.55,
+                if (vm.detail.complaint != null) ...[
+                  Gap(16.h),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(18.w),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF6F0E4),
+                      borderRadius: BorderRadius.circular(18.r),
+                    ),
+                    child: Text(
+                      vm.detail.complaint!,
+                      style: textTheme.body5.copyWith(
+                        color: AppColors.black,
+                        height: 1.55,
+                      ),
                     ),
                   ),
-                ),
+                ],
+
                 Gap(16.h),
                 Button(
                   isCancel: true,
