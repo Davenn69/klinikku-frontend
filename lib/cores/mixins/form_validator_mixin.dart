@@ -6,6 +6,7 @@ mixin FormValidatorMixin on BaseNotifier {
   final RegExp emailRegex = RegExp(
     r'^[\w-\.]+@[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+$',
   );
+  final RegExp nameRegex = RegExp(r'^[A-Za-z\s]+$');
 
   String? getValidation({
     required String value,
@@ -22,6 +23,16 @@ mixin FormValidatorMixin on BaseNotifier {
         setPhoneBorderError();
       }
       return '$label can\'t be empty';
+    }
+
+    if (validationList.contains(Validator.name)) {
+      final trimmedValue = value.trim();
+      if (!nameRegex.hasMatch(trimmedValue)) {
+        return '$label can only contain letters';
+      }
+      if (trimmedValue.length < 2) {
+        return '$label is too short';
+      }
     }
 
     // Length / 8 Characters validation
@@ -45,14 +56,8 @@ mixin FormValidatorMixin on BaseNotifier {
           '- At least 1 number';
     }
 
-    // Confirm Password validation
-    if (validationList.contains(Validator.confirmPassword) &&
-        ((confirmValue ?? '').isEmpty || value != (confirmValue ?? ''))) {
-      return 'Password doesn\'t match';
-    }
-
     return null;
   }
 }
 
-enum Validator { length, emailFormat, passwordFormat, confirmPassword }
+enum Validator { length, emailFormat, passwordFormat, name }
