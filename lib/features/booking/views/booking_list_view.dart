@@ -76,7 +76,7 @@ class BookingListView extends StatelessWidget {
                 ),
                 Gap(6.w),
                 Text(
-                  'Kembali ke Slot',
+                  'Kembali',
                   style: textTheme.body6.copyWith(
                     color: AppColors.white,
                     fontWeight: FontWeight.w500,

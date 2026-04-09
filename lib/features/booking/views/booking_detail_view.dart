@@ -101,7 +101,7 @@ class BookingDetailView extends StatelessWidget {
                   Gap(16.h),
                   Button(
                     isCancel: true,
-                    text: 'Cancel this appointment',
+                    text: 'Batalkan Booking Ini',
                     onPressed: () => vm.deleteBooking(),
                   ),
                 ],
