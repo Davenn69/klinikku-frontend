@@ -25,4 +25,22 @@ class BookingConfirmationServices extends BaseService {
       return e;
     }
   }
+
+  updateBooking({
+    required String bookingId,
+    required String complaint,
+    required String appointmentId,
+  }) async {
+    try {
+      final response = await put(
+        url: '/encounters/$bookingId',
+        data: {'appointment_id': appointmentId, 'complaint': complaint},
+      );
+      print(response);
+      return response;
+    } on DioException catch (e) {
+      print('error create booking');
+      return e;
+    }
+  }
 }

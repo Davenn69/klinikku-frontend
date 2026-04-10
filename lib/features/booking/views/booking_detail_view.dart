@@ -100,6 +100,11 @@ class BookingDetailView extends StatelessWidget {
                 if (vm.detail.status == BookingListStatus.booked) ...[
                   Gap(16.h),
                   Button(
+                    text: 'Ubah Jadwal',
+                    onPressed: () => vm.goToUpdateBooking(),
+                  ),
+                  Gap(16.h),
+                  Button(
                     isCancel: true,
                     text: 'Batalkan Booking Ini',
                     onPressed: () => vm.deleteBooking(),

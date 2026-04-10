@@ -11,6 +11,7 @@ import 'package:klinikku/features/booking/views/booking_confirmation_view.dart';
 import 'package:klinikku/features/booking/views/booking_detail_view.dart';
 import 'package:klinikku/features/booking/views/booking_list_view.dart';
 import 'package:klinikku/features/booking/views/select_appointment_view.dart';
+import 'package:klinikku/features/booking/views/update_appointment_view.dart';
 import 'package:klinikku/features/dashboard/views/dashboard_view.dart';
 import 'package:klinikku/features/splash/views/splash_view.dart';
 
@@ -62,6 +63,18 @@ setUpRoute({required String initialRoute}) {
           final RegionModel region = data['region'];
           final DoctorModel doctor = data['doctor'];
           final AppointmentSlotItem appointment = data['appointment'];
+          final isUpdate = data['isUpdate'];
+          final bookingId = data['bookingId'];
+
+          if (isUpdate == null || isUpdate == false) {
+            return BookingConfirmationView(
+              data: BookingConfirmationModel(
+                doctor: doctor,
+                region: region,
+                appointment: appointment,
+              ),
+            );
+          }
 
           return BookingConfirmationView(
             data: BookingConfirmationModel(
@@ -69,6 +82,8 @@ setUpRoute({required String initialRoute}) {
               region: region,
               appointment: appointment,
             ),
+            isUpdate: true,
+            bookingId: bookingId ?? '',
           );
         },
       ),
@@ -79,6 +94,22 @@ setUpRoute({required String initialRoute}) {
           final data = state.extra as Map<String, dynamic>;
           final id = data['id'];
           return BookingDetailView(bookingId: id);
+        },
+      ),
+      GoRoute(
+        path: RouterRoutes.updateBookingSlot.path,
+        name: RouterRoutes.updateBookingSlot.name,
+        builder: (context, state) {
+          final data = state.extra as Map<String, dynamic>;
+          final RegionModel region = data['region'];
+          final DoctorModel doctor = data['doctor'];
+          final String id = data['id'];
+
+          return UpdateAppointmentView(
+            region: region,
+            doctor: doctor,
+            bookingId: id,
+          );
         },
       ),
     ],

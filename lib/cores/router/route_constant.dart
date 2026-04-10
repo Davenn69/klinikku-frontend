@@ -28,6 +28,10 @@ class RouterRoutes {
     path: '/bookingDetail',
     name: 'bookingDetail',
   );
+  static const updateBookingSlot = RouterRoute(
+    path: '/updateBookingSlot',
+    name: 'updateBookingSlot',
+  );
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

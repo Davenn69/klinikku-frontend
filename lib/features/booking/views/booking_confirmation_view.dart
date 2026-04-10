@@ -14,7 +14,14 @@ import 'package:klinikku/features/booking/viewmodels/booking_confirmation_viewmo
 
 class BookingConfirmationView extends StatelessWidget {
   final BookingConfirmationModel data;
-  const BookingConfirmationView({super.key, required this.data});
+  final bool isUpdate;
+  final String bookingId;
+  const BookingConfirmationView({
+    super.key,
+    required this.data,
+    this.bookingId = '',
+    this.isUpdate = false,
+  });
 
   @override
   Widget build(BuildContext context) =>
@@ -71,6 +78,8 @@ class BookingConfirmationView extends StatelessWidget {
                               data.doctor.id,
                               data.region.id,
                               data.appointment.id,
+                              isUpdate,
+                              bookingId,
                             ),
                         height: 54.h,
                       ),
