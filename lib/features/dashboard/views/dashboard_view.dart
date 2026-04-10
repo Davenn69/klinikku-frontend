@@ -7,8 +7,11 @@ import 'package:klinikku/cores/constants/colors.dart';
 import 'package:klinikku/cores/constants/text_theme.dart';
 import 'package:klinikku/cores/router/route_constant.dart';
 import 'package:klinikku/cores/utils/datetime_extension.dart';
+import 'package:klinikku/cores/widgets/custom_dropdown.dart';
 import 'package:klinikku/cores/widgets/tap_detector.dart';
+import 'package:klinikku/features/booking/models/region_model.dart';
 import 'package:klinikku/features/dashboard/viewmodels/dashboard_viewmodel.dart';
+import 'package:klinikku/features/dashboard/widgets/booking_detail_widget.dart';
 import 'package:klinikku/features/dashboard/widgets/quick_action_card.dart';
 
 enum _ProfileMenuAction { logout }
@@ -39,10 +42,64 @@ class DashboardView extends StatelessWidget {
                       _buildSectionTitle('Aksi Cepat'),
                       Gap(16.h),
                       _buildQuickActions(vm),
-                      if (vm.recentBooking != null) ...[
-                        _buildSectionTitle('Booking Terdekat'),
+                      _buildSectionTitle('Booking Terdekat'),
+                      Gap(16.h),
+                      if (vm.recentBooking != null)
+                        _buildUpcomingBooking(vm)
+                      else
+                        _buildEmptyState(
+                          title: 'Belum ada booking terdekat',
+                          message:
+                              'Booking aktif akan muncul di sini setelah kamu membuat janji.',
+                          icon: Icons.event_busy_rounded,
+                        ),
+                      Gap(16.h),
+                      if (vm.regions.isNotEmpty) ...[
+                        _buildSectionTitle('Booking Berdasarkan Lokasi'),
                         Gap(16.h),
-                        _buildUpcomingBooking(vm),
+                        CustomDropdownButton<RegionModel>(
+                          options: vm.regions,
+                          hint: 'Pilih region',
+                          label: 'REGION',
+                          inputModel: vm.form.region,
+                          getLabel: (value) => value?.name ?? '',
+                          onValueChanged: (data) => vm.onRegionChanged(),
+                        ),
+                        Gap(16.h),
+                        if (vm.selectedBookings != null) ...[
+                          if (vm.selectedBookings!.isEmpty) ...[
+                            _buildEmptyState(
+                              title: 'Belum ada booking di region ini',
+                              message:
+                                  'Coba pilih region lain untuk melihat daftar booking yang tersedia.',
+                              icon: Icons.map_outlined,
+                            ),
+                          ] else ...[
+                            Column(
+                              children:
+                                  vm.selectedBookings!
+                                      .map(
+                                        (item) => Padding(
+                                          padding: EdgeInsets.only(
+                                            bottom: 16.h,
+                                          ),
+                                          child: TapDetector(
+                                            onTap: () {
+                                              ctx.pushNamed(
+                                                RouterRoutes.bookingDetail.name,
+                                                extra: {'id': item.id},
+                                              );
+                                            },
+                                            child: BookingDetailWidget(
+                                              data: item,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                            ),
+                          ],
+                        ],
                       ],
                     ],
                   ),
@@ -150,6 +207,43 @@ class DashboardView extends StatelessWidget {
   Widget _buildSectionTitle(String title) =>
       Text(title, style: textTheme.subHeadline1);
 
+  Widget _buildEmptyState({
+    required String title,
+    required String message,
+    required IconData icon,
+  }) => Container(
+    width: double.infinity,
+    padding: EdgeInsets.symmetric(vertical: 28.h, horizontal: 18.w),
+    decoration: BoxDecoration(
+      color: AppColors.white,
+      borderRadius: BorderRadius.circular(22.r),
+      boxShadow: [
+        BoxShadow(
+          color: AppColors.black.withValues(alpha: 0.04),
+          blurRadius: 18,
+          offset: const Offset(0, 8),
+        ),
+      ],
+    ),
+    child: Column(
+      children: [
+        Icon(icon, size: 34.sp, color: AppColors.gray1),
+        Gap(10.h),
+        Text(
+          title,
+          style: textTheme.body5.copyWith(fontWeight: FontWeight.w700),
+          textAlign: TextAlign.center,
+        ),
+        Gap(4.h),
+        Text(
+          message,
+          style: textTheme.body6.copyWith(color: AppColors.gray1),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+  );
+
   Widget _buildQuickActions(DashboardVM vm) => GridView.builder(
     shrinkWrap: true,
     physics: const NeverScrollableScrollPhysics(),
@@ -173,78 +267,7 @@ class DashboardView extends StatelessWidget {
         extra: {'id': vm.recentBooking!.id},
       );
     },
-    child: Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(18.w),
-      decoration: BoxDecoration(
-        color: const Color(0xFFDDEDEC),
-        borderRadius: BorderRadius.circular(22.r),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.05),
-            blurRadius: 18,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 4.w,
-            height: 108.h,
-            decoration: BoxDecoration(
-              color: AppColors.primary,
-              borderRadius: BorderRadius.circular(999.r),
-            ),
-          ),
-          Gap(14.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "${vm.recentBooking!.appointmentSlot.date.toIndonesianShortDayDateString()} | ${vm.recentBooking!.appointmentSlot.timeRangeText}",
-                  style: textTheme.caption1.copyWith(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                Gap(8.h),
-                Text(
-                  vm.recentBooking!.doctor.name,
-                  style: textTheme.body2.copyWith(fontWeight: FontWeight.w700),
-                ),
-                Text(
-                  vm.recentBooking!.doctor.specialization,
-                  style: textTheme.body6.copyWith(color: AppColors.gray1),
-                ),
-                Gap(16.h),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      vm.recentBooking!.statusLabel,
-                      style: textTheme.body5.copyWith(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Gap(22.w),
-                    Expanded(
-                      child: Text(
-                        vm.recentBooking!.bookingCode,
-                        style: textTheme.body6.copyWith(color: AppColors.gray1),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ),
+    child: BookingDetailWidget(data: vm.recentBooking!),
   );
 
   Future<void> _confirmLogout(BuildContext context, DashboardVM vm) async {
