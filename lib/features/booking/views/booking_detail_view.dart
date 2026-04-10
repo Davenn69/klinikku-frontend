@@ -5,7 +5,10 @@ import 'package:gap/gap.dart';
 import 'package:klinikku/cores/bases/base_view.dart';
 import 'package:klinikku/cores/constants/colors.dart';
 import 'package:klinikku/cores/constants/text_theme.dart';
+import 'package:klinikku/cores/router/route_constant.dart';
+import 'package:klinikku/cores/utils/datetime_extension.dart';
 import 'package:klinikku/cores/widgets/custom_button.dart';
+import 'package:klinikku/features/booking/models/booking_model.dart';
 import 'package:klinikku/features/booking/viewmodels/booking_detail_viewmodel.dart';
 
 class BookingDetailView extends StatelessWidget {
@@ -30,6 +33,7 @@ class BookingDetailView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildHeader(context, vm),
+          Gap(8.h),
           Padding(
             padding: EdgeInsets.fromLTRB(16.w, 18.h, 16.w, 24.h),
             child: Column(
@@ -37,77 +41,71 @@ class BookingDetailView extends StatelessWidget {
               children: [
                 Text(
                   'Informasi Dokter',
-                  style: textTheme.headline1.copyWith(
+                  style: textTheme.subHeadline1.copyWith(
                     color: AppColors.black,
                     height: 1.2,
                   ),
                 ),
-                Gap(18.h),
-                _buildInfoCard(
-                  children: [
-                    _buildInfoRow('Nama Dokter', vm.detail.doctor.name),
-                    _buildDivider(),
-                    _buildInfoRow(
-                      'Spesialisasi',
-                      vm.detail.doctor.specialization,
-                    ),
-                  ],
-                ),
-                Gap(26.h),
+                _buildInfoRow('Nama Dokter', vm.detail.doctor.name),
+                _buildDivider(),
+                _buildInfoRow('Spesialisasi', vm.detail.doctor.specialization),
                 Text(
                   'Jadwal Appointment',
-                  style: textTheme.headline1.copyWith(
+                  style: textTheme.subHeadline1.copyWith(
                     color: AppColors.black,
                     height: 1.2,
                   ),
                 ),
-                Gap(18.h),
-                _buildInfoCard(
-                  children: [
-                    _buildInfoRow('Tanggal', vm.detail.appointmentSlot.date),
-                    _buildDivider(),
-                    _buildInfoRow(
-                      'Jam',
-                      vm.detail.appointmentSlot.timeRangeText,
-                      valueStyle: textTheme.body2.copyWith(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w700,
+                _buildInfoRow(
+                  'Tanggal',
+                  vm.detail.appointmentSlot.date.toIndonesianDayDateString(),
+                ),
+                _buildDivider(),
+                _buildInfoRow(
+                  'Jam',
+                  vm.detail.appointmentSlot.timeRangeText,
+                  valueStyle: textTheme.body6.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                _buildDivider(),
+                _buildInfoRow('Region', vm.detail.region.name),
+                if (vm.detail.complaint != null) ...[
+                  Gap(16.h),
+                  Text(
+                    'Keluhan Pasien',
+                    style: textTheme.subHeadline1.copyWith(
+                      color: AppColors.black,
+                      height: 1.2,
+                    ),
+                  ),
+                  Gap(16.h),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(18.w),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF6F0E4),
+                      borderRadius: BorderRadius.circular(18.r),
+                    ),
+                    child: Text(
+                      vm.detail.complaint!,
+                      style: textTheme.body6.copyWith(
+                        color: AppColors.black,
+                        height: 1.55,
                       ),
                     ),
-                    _buildDivider(),
-                    _buildInfoRow('Region', vm.detail.region.name),
-                  ],
-                ),
-                Gap(26.h),
-                Text(
-                  'Keluhan Pasien',
-                  style: textTheme.headline1.copyWith(
-                    color: AppColors.black,
-                    height: 1.2,
                   ),
-                ),
-                Gap(16.h),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(18.w),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF6F0E4),
-                    borderRadius: BorderRadius.circular(18.r),
+                ],
+                if (vm.detail.status == BookingListStatus.booked) ...[
+                  Gap(16.h),
+                  Button(
+                    isCancel: true,
+                    text: 'Batalkan Booking Ini',
+                    onPressed: () => vm.deleteBooking(),
                   ),
-                  child: Text(
-                    vm.detail.complaint,
-                    style: textTheme.body5.copyWith(
-                      color: AppColors.black,
-                      height: 1.55,
-                    ),
-                  ),
-                ),
-                Gap(16.h),
-                Button(
-                  isCancel: true,
-                  text: 'Cancel this appointment',
-                  onPressed: () => vm.deleteBooking(),
-                ),
+                ],
+                Gap(48.h),
               ],
             ),
           ),
@@ -119,19 +117,13 @@ class BookingDetailView extends StatelessWidget {
   Widget _buildHeader(BuildContext context, BookingDetailVM vm) => Container(
     width: double.infinity,
     padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 30.h),
-    decoration: const BoxDecoration(
-      color: Color(0xFF3A7F77),
-      borderRadius: BorderRadius.only(
-        bottomLeft: Radius.circular(28),
-        bottomRight: Radius.circular(28),
-      ),
-    ),
+    decoration: const BoxDecoration(color: AppColors.primary),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Gap(4.h),
+        Gap(2.h),
         InkWell(
-          onTap: () => Navigator.of(context).maybePop(),
+          onTap: () => Navigator.of(ctx).maybePop(),
           borderRadius: BorderRadius.circular(12.r),
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 6.h),
@@ -143,7 +135,7 @@ class BookingDetailView extends StatelessWidget {
                   color: AppColors.white,
                   size: 20.sp,
                 ),
-                Gap(8.w),
+                Gap(6.w),
                 Text(
                   'Daftar Booking',
                   style: textTheme.body6.copyWith(
@@ -155,7 +147,7 @@ class BookingDetailView extends StatelessWidget {
             ),
           ),
         ),
-        Gap(22.h),
+        Gap(16.h),
         Center(
           child: Column(
             children: [
@@ -204,23 +196,15 @@ class BookingDetailView extends StatelessWidget {
     ),
   );
 
-  Widget _buildInfoCard({required List<Widget> children}) => Container(
-    width: double.infinity,
-    padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 6.h),
-    decoration: BoxDecoration(
-      color: AppColors.white,
-      borderRadius: BorderRadius.circular(18.r),
-    ),
-    child: Column(children: children),
-  );
-
   Widget _buildInfoRow(String label, String value, {TextStyle? valueStyle}) =>
       Padding(
         padding: EdgeInsets.symmetric(vertical: 16.h),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
+            Flexible(
+              flex: 3,
               child: Text(
                 label,
                 style: textTheme.body6.copyWith(
@@ -229,13 +213,14 @@ class BookingDetailView extends StatelessWidget {
                 ),
               ),
             ),
-            Expanded(
+            Flexible(
+              flex: 7,
               child: Text(
                 value,
                 textAlign: TextAlign.right,
                 style:
                     valueStyle ??
-                    textTheme.body2.copyWith(
+                    textTheme.body6.copyWith(
                       color: AppColors.black,
                       fontWeight: FontWeight.w700,
                     ),

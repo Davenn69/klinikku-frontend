@@ -6,6 +6,7 @@ import 'package:klinikku/cores/bases/base_view.dart';
 import 'package:klinikku/cores/constants/colors.dart';
 import 'package:klinikku/cores/constants/text_theme.dart';
 import 'package:klinikku/cores/router/route_constant.dart';
+import 'package:klinikku/cores/utils/datetime_extension.dart';
 import 'package:klinikku/cores/widgets/tap_detector.dart';
 import 'package:klinikku/features/booking/models/booking_model.dart';
 import 'package:klinikku/features/booking/viewmodels/booking_list_viewmodel.dart';
@@ -14,11 +15,8 @@ class BookingListView extends StatelessWidget {
   const BookingListView({super.key});
 
   @override
-  Widget build(BuildContext context) => BaseView(
-    provider: bookingListVM,
-    backgroundColor: const Color(0xFFF7F8F5),
-    builder: _buildScreen,
-  );
+  Widget build(BuildContext context) =>
+      BaseView(provider: bookingListVM, builder: _buildScreen);
 
   Widget _buildScreen(BuildContext context, BookingListVM vm) => SafeArea(
     bottom: false,
@@ -62,7 +60,33 @@ class BookingListView extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Gap(6.h),
+        Gap(2.h),
+        InkWell(
+          onTap: () => Navigator.of(ctx).maybePop(),
+          borderRadius: BorderRadius.circular(12.r),
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 6.h),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.arrow_back_rounded,
+                  color: AppColors.white,
+                  size: 20.sp,
+                ),
+                Gap(6.w),
+                Text(
+                  'Kembali',
+                  style: textTheme.body6.copyWith(
+                    color: AppColors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Gap(16.h),
         Row(
           children: [
             Expanded(
@@ -74,26 +98,20 @@ class BookingListView extends StatelessWidget {
                 ),
               ),
             ),
-            Icon(Icons.bookmark_rounded, color: AppColors.white, size: 24.sp),
           ],
-        ),
-        Gap(6.h),
-        Text(
-          vm.totalBookingLabel,
-          style: textTheme.body2.copyWith(
-            color: AppColors.gray3,
-            fontWeight: FontWeight.w400,
-          ),
         ),
       ],
     ),
   );
 
-  Widget _buildFilterTabs(BookingListVM vm) => Row(
-    children: List.generate(vm.filterLabels.length, (index) {
-      final isSelected = vm.selectedFilterIndex == index;
-      return Expanded(
-        child: Padding(
+  Widget _buildFilterTabs(BookingListVM vm) => SingleChildScrollView(
+    scrollDirection: Axis.horizontal,
+    physics: const BouncingScrollPhysics(),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(vm.filterLabels.length, (index) {
+        final isSelected = vm.selectedFilterIndex == index;
+        return Padding(
           padding: EdgeInsets.only(
             right: index == vm.filterLabels.length - 1 ? 0 : 10.w,
           ),
@@ -103,23 +121,13 @@ class BookingListView extends StatelessWidget {
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 180),
               alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(vertical: 12.h),
+              padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 16.w),
               decoration: BoxDecoration(
                 color: isSelected ? AppColors.primary : AppColors.white,
                 borderRadius: BorderRadius.circular(999.r),
                 border: Border.all(
                   color: isSelected ? AppColors.primary : AppColors.gray2,
                 ),
-                boxShadow:
-                    isSelected
-                        ? [
-                          BoxShadow(
-                            color: AppColors.primary.withValues(alpha: 0.15),
-                            blurRadius: 12,
-                            offset: const Offset(0, 6),
-                          ),
-                        ]
-                        : null,
               ),
               child: Text(
                 vm.filterLabels[index],
@@ -130,9 +138,9 @@ class BookingListView extends StatelessWidget {
               ),
             ),
           ),
-        ),
-      );
-    }),
+        );
+      }),
+    ),
   );
 
   Widget _buildEmptyState() => Container(
@@ -248,11 +256,9 @@ class _BookingCard extends StatelessWidget {
           Gap(12.h),
           Row(
             children: [
-              Text('📅', style: TextStyle(fontSize: 18.sp)),
-              Gap(8.w),
               Expanded(
                 child: Text(
-                  item.appointmentSlot.timeRangeText,
+                  '${item.appointmentSlot.date.toIndonesianShortDayDateString()} | ${item.appointmentSlot.timeRangeText}',
                   style: textTheme.body6.copyWith(
                     color: AppColors.gray1,
                     fontWeight: FontWeight.w500,

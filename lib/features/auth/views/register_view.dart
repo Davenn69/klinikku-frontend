@@ -13,19 +13,21 @@ import 'package:klinikku/cores/constants/text_theme.dart';
 import 'package:klinikku/cores/router/route_constant.dart';
 import 'package:klinikku/cores/widgets/custom_button.dart';
 import 'package:klinikku/cores/widgets/custom_text_field.dart';
-import 'package:klinikku/features/auth/viewmodels/login_viewmodel.dart';
+import 'package:klinikku/features/auth/viewmodels/register_viewmodel.dart';
 
-class LoginView extends StatelessWidget {
-  final AutoDisposeChangeNotifierProvider<LoginVM> loginVM;
+class RegisterView extends StatelessWidget {
+  final AutoDisposeChangeNotifierProvider<RegisterVM> registerVM;
 
-  LoginView({super.key})
-    : loginVM = ChangeNotifierProvider.autoDispose<LoginVM>(LoginVM.new);
+  RegisterView({super.key})
+    : registerVM = ChangeNotifierProvider.autoDispose<RegisterVM>(
+        RegisterVM.new,
+      );
 
   @override
   Widget build(BuildContext context) =>
-      BaseView(provider: loginVM, builder: _buildScreen);
+      BaseView(provider: registerVM, builder: _buildScreen);
 
-  Widget _buildScreen(BuildContext context, LoginVM vm) => SafeArea(
+  Widget _buildScreen(BuildContext context, RegisterVM vm) => SafeArea(
     child: SingleChildScrollView(
       child: Form(
         key: vm.formKey,
@@ -63,10 +65,10 @@ class LoginView extends StatelessWidget {
 
                       Gap(16.h),
                       Text('Selamat Datang', style: textTheme.headline1),
-                      Text('Kembali 👋', style: textTheme.headline1),
+                      Text('Mari Bergabung 👋', style: textTheme.headline1),
                       Gap(4.h),
                       Text(
-                        'Kelola janji temu Anda dengan mudah',
+                        'Mulai dengan registrasi data anda',
                         style: textTheme.caption2,
                       ),
                     ],
@@ -79,6 +81,13 @@ class LoginView extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: Column(
                 children: [
+                  CustomTextField(
+                    label: 'Nama',
+                    hint: 'Masukkan nama anda',
+                    inputModel: vm.form.name,
+                    onSubmit: (data) {},
+                  ),
+                  Gap(16.h),
                   CustomTextField(
                     label: 'Email',
                     hint: 'Masukkan email anda',
@@ -94,7 +103,7 @@ class LoginView extends StatelessWidget {
                     onSubmit: (data) {},
                   ),
                   Gap(48.h),
-                  Button(text: 'Masuk', onPressed: vm.login),
+                  Button(text: 'Daftar', onPressed: vm.register),
                   Gap(16.h),
                   Center(
                     child: Text.rich(
@@ -103,9 +112,9 @@ class LoginView extends StatelessWidget {
                           color: AppColors.gray1,
                         ),
                         children: [
-                          const TextSpan(text: 'Belum punya akun? '),
+                          const TextSpan(text: 'Sudah punya akun? '),
                           TextSpan(
-                            text: 'Daftar',
+                            text: 'Login',
                             style: textTheme.caption2.copyWith(
                               color: AppColors.primary,
                               fontWeight: FontWeight.w600,
@@ -114,7 +123,7 @@ class LoginView extends StatelessWidget {
                                 TapGestureRecognizer()
                                   ..onTap = () {
                                     ctx.pushReplacementNamed(
-                                      RouterRoutes.register.name,
+                                      RouterRoutes.login.name,
                                     );
                                   },
                           ),

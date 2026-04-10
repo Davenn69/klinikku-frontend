@@ -9,21 +9,29 @@ import 'package:klinikku/cores/mixins/toast_mixin.dart';
 import 'package:klinikku/cores/models/text_input_model.dart';
 import 'package:klinikku/cores/router/route_constant.dart';
 import 'package:klinikku/cores/utils/hive_helper.dart';
-import 'package:klinikku/features/auth/models/login_form_model.dart';
-import 'package:klinikku/features/auth/services/login_services.dart';
+import 'package:klinikku/features/auth/models/register_form_model.dart';
+import 'package:klinikku/features/auth/services/register_services.dart';
 
-class LoginVM extends BaseFormNotifier<LoginFormModel>
+class RegisterVM extends BaseFormNotifier<RegisterFormModel>
     with FormValidatorMixin, ToastMixin {
   @override
-  late LoginFormModel form;
+  late RegisterFormModel form;
 
-  final _service = LoginServices();
+  final _service = RegisterServices();
 
-  LoginVM(super.ref);
+  RegisterVM(super.ref);
 
   @override
   FutureOr<void> init() {
-    form = LoginFormModel(
+    form = RegisterFormModel(
+      name: TextInputModel(
+        validator:
+            (value) => getValidation(
+              value: value,
+              label: 'Nama',
+              validationList: [Validator.name],
+            ),
+      ),
       email: TextInputModel(
         validator:
             (value) => getValidation(
@@ -37,16 +45,20 @@ class LoginVM extends BaseFormNotifier<LoginFormModel>
             (value) => getValidation(
               value: value,
               label: 'Password',
-              validationList: [],
+              validationList: [Validator.passwordFormat],
             ),
       ),
     );
   }
 
-  login() async {
+  register() async {
     if (!validate()) return;
     isLoading = true;
-    var response = await _service.login(form.email.text, form.password.text);
+    var response = await _service.register(
+      form.name.text,
+      form.email.text,
+      form.password.text,
+    );
     isLoading = false;
     if (response is DioException) {
       String errorMsg =

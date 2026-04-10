@@ -28,7 +28,7 @@ class SelectAppointmentVM extends BaseFormNotifier<SelectAppointmentFormModel>
   late List<AppointmentDayItem> availableDays;
   List<AppointmentSlotItem> slots = [];
 
-  int selectedDayIndex = 1;
+  int selectedDayIndex = 0;
 
   final SelectAppointmentServices _service = SelectAppointmentServices();
 
@@ -36,49 +36,88 @@ class SelectAppointmentVM extends BaseFormNotifier<SelectAppointmentFormModel>
 
   @override
   FutureOr<void> init() async {
-    availableDays = [
-      AppointmentDayItem(
-        dayNumber: '6',
-        dayLabel: 'Sen',
-        fullLabel: 'Sen, 6 Apr',
-        date: DateTime(2026, 4, 6),
-      ),
-      AppointmentDayItem(
-        dayNumber: '7',
-        dayLabel: 'Sel',
-        fullLabel: 'Sel, 7 Apr',
-        date: DateTime(2026, 4, 7),
-      ),
-      AppointmentDayItem(
-        dayNumber: '8',
-        dayLabel: 'Rab',
-        fullLabel: 'Rab, 8 Apr',
-        date: DateTime(2026, 4, 8),
-      ),
-      AppointmentDayItem(
-        dayNumber: '9',
-        dayLabel: 'Kam',
-        fullLabel: 'Kam, 9 Apr',
-        date: DateTime(2026, 4, 9),
-      ),
-      AppointmentDayItem(
-        dayNumber: '10',
-        dayLabel: 'Jum',
-        fullLabel: 'Jum, 10 Apr',
-        date: DateTime(2026, 4, 10),
-      ),
-    ];
+    availableDays = _generateAvailableDays();
 
     form = SelectAppointmentFormModel(
       region: SelectionInputModel<RegionModel>(),
       doctor: SelectionInputModel<DoctorModel>(),
       date: SelectionInputModel<DateTime>(),
     );
+    form.date.selectedValue = availableDays[selectedDayIndex].date;
 
     await getRegions();
   }
 
-  String get selectedDateText => availableDays[selectedDayIndex].fullLabel;
+  String get selectedDateText =>
+      availableDays.isEmpty ? '' : availableDays[selectedDayIndex].fullLabel;
+
+  List<AppointmentDayItem> _generateAvailableDays() {
+    final today = DateTime.now();
+    final startDate = DateTime(today.year, today.month, today.day);
+
+    return List.generate(7, (index) {
+      final date = startDate.add(Duration(days: index));
+      final dayLabel = _weekdayLabel(date.weekday);
+      return AppointmentDayItem(
+        dayNumber: '${date.day}',
+        dayLabel: dayLabel,
+        fullLabel: '$dayLabel, ${date.day} ${_monthLabel(date.month)}',
+        date: date,
+      );
+    });
+  }
+
+  String _weekdayLabel(int weekday) {
+    switch (weekday) {
+      case DateTime.monday:
+        return 'Sen';
+      case DateTime.tuesday:
+        return 'Sel';
+      case DateTime.wednesday:
+        return 'Rab';
+      case DateTime.thursday:
+        return 'Kam';
+      case DateTime.friday:
+        return 'Jum';
+      case DateTime.saturday:
+        return 'Sab';
+      case DateTime.sunday:
+        return 'Min';
+      default:
+        return '';
+    }
+  }
+
+  String _monthLabel(int month) {
+    switch (month) {
+      case 1:
+        return 'Jan';
+      case 2:
+        return 'Feb';
+      case 3:
+        return 'Mar';
+      case 4:
+        return 'Apr';
+      case 5:
+        return 'Mei';
+      case 6:
+        return 'Jun';
+      case 7:
+        return 'Jul';
+      case 8:
+        return 'Agu';
+      case 9:
+        return 'Sep';
+      case 10:
+        return 'Okt';
+      case 11:
+        return 'Nov';
+      case 12:
+        return 'Des';
+      default:
+        return '';
+    }
+  }
 
   void selectDay(int index) async {
     selectedDayIndex = index;
@@ -93,11 +132,18 @@ class SelectAppointmentVM extends BaseFormNotifier<SelectAppointmentFormModel>
   }
 
   void onRegionChanged(String id) async {
+    form.doctor.clear();
+    slots = [];
     await getDoctors(id);
   }
 
-  void onDoctorChanged(DoctorModel value) {
-    notifyListeners();
+  void onDoctorChanged(DoctorModel value) async {
+    slots = [];
+    if (form.region.selectedValue != null &&
+        form.doctor.selectedValue != null &&
+        form.date.selectedValue != null) {
+      await getAppointments();
+    }
   }
 
   void onSlotTap(AppointmentSlotItem slot) {
@@ -133,8 +179,6 @@ class SelectAppointmentVM extends BaseFormNotifier<SelectAppointmentFormModel>
         (data as List<dynamic>)
             .map((item) => RegionModel.fromResponseBody(item))
             .toList();
-
-    notifyListeners();
   }
 
   getDoctors(String id) async {
@@ -157,8 +201,6 @@ class SelectAppointmentVM extends BaseFormNotifier<SelectAppointmentFormModel>
         (data as List<dynamic>)
             .map((item) => DoctorModel.fromResponseBody(item))
             .toList();
-
-    notifyListeners();
   }
 
   getAppointments() async {
@@ -191,7 +233,5 @@ class SelectAppointmentVM extends BaseFormNotifier<SelectAppointmentFormModel>
         (data as List<dynamic>)
             .map((item) => AppointmentSlotItem.fromResponseBody(item))
             .toList();
-
-    notifyListeners();
   }
 }

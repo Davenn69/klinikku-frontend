@@ -6,6 +6,7 @@ import 'package:klinikku/cores/bases/base_view.dart';
 import 'package:klinikku/cores/constants/colors.dart';
 import 'package:klinikku/cores/constants/text_theme.dart';
 import 'package:klinikku/cores/router/route_constant.dart';
+import 'package:klinikku/cores/utils/datetime_extension.dart';
 import 'package:klinikku/cores/widgets/custom_button.dart';
 import 'package:klinikku/cores/widgets/custom_text_field.dart';
 import 'package:klinikku/features/booking/models/booking_confirmation_model.dart';
@@ -16,11 +17,8 @@ class BookingConfirmationView extends StatelessWidget {
   const BookingConfirmationView({super.key, required this.data});
 
   @override
-  Widget build(BuildContext context) => BaseView(
-    provider: bookingConfirmationVm,
-    backgroundColor: const Color(0xFFF7F7F4),
-    builder: _buildScreen,
-  );
+  Widget build(BuildContext context) =>
+      BaseView(provider: bookingConfirmationVm, builder: _buildScreen);
 
   Widget _buildScreen(BuildContext context, BookingConfirmationVM vm) =>
       SafeArea(
@@ -130,7 +128,7 @@ class BookingConfirmationView extends StatelessWidget {
             ),
           ),
         ),
-        Gap(18.h),
+        Gap(16.h),
         Text(
           'Konfirmasi Booking',
           style: textTheme.headline1.copyWith(
@@ -158,14 +156,17 @@ class BookingConfirmationView extends StatelessWidget {
         Gap(10.h),
         _buildDetailRow('Region', data.region.name),
         Gap(10.h),
-        _buildDetailRow('Tanggal', data.appointment.date),
+        _buildDetailRow(
+          'Tanggal',
+          data.appointment.date.toIndonesianDayDateString(),
+        ),
         Gap(10.h),
         _buildDetailRow(
           'Jam',
           data.appointment.timeRangeText,
           valueStyle: textTheme.body4.copyWith(
             color: AppColors.primary,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w800,
           ),
         ),
       ],
