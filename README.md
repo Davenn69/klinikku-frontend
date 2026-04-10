@@ -2,6 +2,10 @@
 
 Klinikku adalah aplikasi Flutter dengan arsitektur feature-based modular, state management menggunakan Riverpod, navigasi memakai GoRouter, penyimpanan lokal dengan Hive, dan dukungan environment via `envied`.
 
+# Link Dokumentasi Testing
+
+https://drive.google.com/drive/folders/1_jLiYdakTsjPE_nicdJBRE6csPwtiTU-?usp=sharing
+
 # Link Figma
 
 https://www.figma.com/design/B6zGoiQrOGdbo30GNuqOk5/Klinikku?node-id=0-1&t=uOGuYowrPiM9dQ6I-1
