@@ -34,7 +34,7 @@ class BookingConfirmationServices extends BaseService {
     try {
       final response = await put(
         url: '/encounters/$bookingId',
-        data: {'appointment_id': appointmentId},
+        data: {'appointment_id': appointmentId, 'complaint': complaint},
       );
       print(response);
       return response;
