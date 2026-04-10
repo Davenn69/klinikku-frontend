@@ -17,11 +17,8 @@ class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
 
   @override
-  Widget build(BuildContext context) => BaseView(
-    provider: dashboardVM,
-    backgroundColor: const Color(0xFFF7F8F5),
-    builder: _buildScreen,
-  );
+  Widget build(BuildContext context) =>
+      BaseView(provider: dashboardVM, builder: _buildScreen);
 
   Widget _buildScreen(BuildContext context, DashboardVM vm) => SafeArea(
     bottom: false,
@@ -90,6 +87,8 @@ class DashboardView extends StatelessWidget {
                   Text(
                     'Halo, ${vm.profile.name}! 👋',
                     style: textTheme.headline1.copyWith(height: 1.2),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
                   ),
                 ],
               ),

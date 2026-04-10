@@ -85,6 +85,7 @@ class SelectAppointmentView extends StatelessWidget {
                     'Menampilkan ${vm.slots.length} slot untuk ${vm.selectedDateText}',
                     style: textTheme.body6.copyWith(color: AppColors.gray1),
                   ),
+                  Gap(8.h),
                   Column(
                     children:
                         vm.slots.map((slot) {
