@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:klinikku/cores/bases/base_form_notifier.dart';
@@ -9,6 +10,7 @@ import 'package:klinikku/cores/models/text_input_model.dart';
 import 'package:klinikku/cores/router/route_constant.dart';
 import 'package:klinikku/features/booking/models/booking_confirmation_form_model.dart';
 import 'package:klinikku/features/booking/services/booking_confirmation_services.dart';
+import 'package:klinikku/features/booking/viewmodels/booking_list_viewmodel.dart';
 import 'package:klinikku/features/booking/viewmodels/select_appointment_viewmodel.dart';
 import 'package:klinikku/features/dashboard/viewmodels/dashboard_viewmodel.dart';
 
@@ -36,33 +38,60 @@ class BookingConfirmationVM
     String doctorId,
     String regionId,
     String appointmentId,
+    bool isUpdate,
+    String bookingId,
   ) async {
     if (!validate()) return;
 
-    isLoading = true;
-    final response = await _services.createBooking(
-      doctorId: doctorId,
-      regionId: regionId,
-      complaint: form.complaint.text,
-      appointmentId: appointmentId,
-    );
-    isLoading = false;
-    if (response is DioException) {
-      String errorMsg =
-          response.response == null
-              ? "Internal server error."
-              : response.response!.data['error']['message'];
-      showErrorToast(errorMsg);
-      return;
-    }
+    if (isUpdate) {
+      isLoading = true;
+      final response = await _services.updateBooking(
+        bookingId: bookingId,
+        complaint: form.complaint.text,
+        appointmentId: appointmentId,
+      );
+      isLoading = false;
+      if (response is DioException) {
+        String errorMsg =
+            response.response == null
+                ? "Internal server error."
+                : response.response!.data['error']['message'];
+        showErrorToast(errorMsg);
+        return;
+      }
 
-    showSuccessToast('Berhasil konfirmasi booking');
-    ref.invalidate(selectAppointmentVm);
-    ref.invalidate(dashboardVM);
-    final data = response.data['encounter'];
-    ctx.pushReplacementNamed(
-      RouterRoutes.bookingDetail.name,
-      extra: {'id': data['id']},
-    );
+      ref.invalidate(dashboardVM);
+      ref.invalidate(bookingListVM);
+      Navigator.popUntil(
+        ctx,
+        (route) => route.settings.name == RouterRoutes.bookingDetail.name,
+      );
+    } else {
+      isLoading = true;
+      final response = await _services.createBooking(
+        doctorId: doctorId,
+        regionId: regionId,
+        complaint: form.complaint.text,
+        appointmentId: appointmentId,
+      );
+      isLoading = false;
+      if (response is DioException) {
+        String errorMsg =
+            response.response == null
+                ? "Internal server error."
+                : response.response!.data['error']['message'];
+        showErrorToast(errorMsg);
+        return;
+      }
+
+      showSuccessToast('Berhasil konfirmasi booking');
+      ref.invalidate(selectAppointmentVm);
+      ref.invalidate(dashboardVM);
+      final data = response.data['encounter'];
+      ctx.pushReplacementNamed(
+        RouterRoutes.bookingDetail.name,
+        extra: {'id': data['id']},
+      );
+    }
   }
 }

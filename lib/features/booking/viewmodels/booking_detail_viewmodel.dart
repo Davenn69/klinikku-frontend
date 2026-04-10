@@ -23,6 +23,17 @@ class BookingDetailVM extends BaseNotifier with ToastMixin {
     await getBookingDetail();
   }
 
+  goToUpdateBooking() async {
+    ctx.pushNamed(
+      RouterRoutes.updateBookingSlot.name,
+      extra: {
+        'region': detail.region,
+        'doctor': detail.doctor,
+        'id': detail.id,
+      },
+    );
+  }
+
   getBookingDetail() async {
     final response = await _service.getDetail(bookingId);
 
